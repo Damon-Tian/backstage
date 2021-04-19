@@ -6,8 +6,10 @@ import store from './store/index'
 import App from './App.vue'
 
 const app = createApp(App)
-
-app.use(router).use(store).use(ElementPlus).mount('#app')
+app.use(router)
+    .use(store)
+    .use(ElementPlus)
+    .mount('#app')
 
 import { routes as routesConstent } from './router/index'
 

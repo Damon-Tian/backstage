@@ -10,11 +10,13 @@
 export default {
     setup() {},
 
-    data() {},
+    data() {
+        return {}
+    },
     computed: {
         routes() {
             return this.$store.state.routes.routes
-        },
-    },
+        }
+    }
 }
 </script>

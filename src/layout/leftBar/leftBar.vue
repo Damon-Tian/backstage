@@ -1,78 +1,66 @@
 <template>
     <el-menu
-        :uniqueOpened="true"
-        default-active="2"
+        :default-active="defaultActive"
+        :uniqueOpened="false"
         class="d-leftBar"
-        @open="handleOpen"
-        @close="handleClose"
-        background-color="#545c64"
+        background-color="black"
         text-color="#fff"
         active-text-color="#ffd04b"
     >
-        <el-submenu index="1" v-for="(item, index) in routes" :key="index">
-            <!-- <template #title>
-                <i class="el-icon-location"></i>
-                <span>导航一</span>
-            </template> -->
-            <template #title>
-                <i class="el-icon-location"></i>
-                <span>首页</span>
-            </template>
-            <el-menu-item-group v-for="(itemChild, indexChild) in item.children" :key="indexChild">
-                <router-link :to="itemChild.path || '/'">
-                    <el-menu-item :index="itemChild.name">
-                        {{ itemChild.name }}
-                    </el-menu-item>
-                </router-link>
-            </el-menu-item-group>
-        </el-submenu>
-        <!--
-        <el-menu-item index="3" disabled>
-            <i class="el-icon-document"></i>
-            <template #title>导航三</template>
-        </el-menu-item>
-        <el-menu-item index="4">
-            <i class="el-icon-setting"></i>
-            <template #title>导航四</template>
-        </el-menu-item> -->
+        <menu-group :menus="menus"></menu-group>
     </el-menu>
 </template>
 
 <script>
+import menuGroup from './components/menuGruop.vue'
 export default {
+    components: { menuGroup },
     setup() {},
     data() {
-        return {}
+        return {
+            defaultActive: ''
+        }
     },
-    created() {
-        // debugger
-        console.log(this.$route, this.$router)
-    },
+    created() {},
     computed: {
-        routes() {
-            return this.$store.state.routes.routes.slice(0, 1)
-        },
+        menus() {
+            const menus = this.$store.state.routes.routes[0].children
+            console.log(menus)
+            return menus
+        }
     },
     watch: {
         // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
         $route: {
             handler(newValue, oldName) {
                 const matched = Array.from(newValue.matched)
+                if (!matched.length) {
+                    this.$router.push('/404')
+                    return
+                }
                 matched.splice(0, 1)
                 this.breadcrumb = matched
-                console.log('in watch', newValue)
+                let lastPath = this.breadcrumb.slice(-1)
+                this.defaultActive = lastPath[0].name
+                this.$store.commit('bread/addBread', newValue)
             },
-            immediate: true,
-        },
-    },
+            immediate: true
+        }
+    }
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .d-leftBar {
     min-height: 100vh;
     overflow: hidden;
     overflow-y: auto;
+    .el-menu-item:hover,
+    .is-active:hover,
+    .el-submenu__title:hover,
+    .el-menu-item:hover.is-active:hover {
+        background: rgba(255, 255, 255, 0.15) !important;
+    }
 }
 a {
     text-decoration: none;

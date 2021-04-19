@@ -1,6 +1,5 @@
 <template>
-    this is one
     <div>
-        <router-view />
+        404 NOT FOUND
     </div>
 </template>
