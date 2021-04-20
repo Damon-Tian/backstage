@@ -8,8 +8,7 @@
         :default-sort="option"
         @sort-change="sortChange"
     >
-        <el-table-column type="selection" width="55" v-if="tableOptions.table.select">
-        </el-table-column>
+        <el-table-column type="selection" width="55" v-if="tableOptions.table.select"> </el-table-column>
         <el-table-column
             v-for="(item, index) in tableOptions.columns"
             :key="index"
@@ -20,27 +19,30 @@
             :show-overflow-tooltip="true"
         >
             <template #default="scope">
-                <slot
-                    :row="scope.row"
-                    :index="scope.$index"
-                    :column="item"
-                    :store="scope.store"
-                    :columns="scope.column"
-                ></slot>
+                <slot :row="scope.row" :index="scope.$index" :column="item" :store="scope.store" :columns="scope.column"></slot>
+            </template>
+        </el-table-column>
+        <el-table-column label="操作" v-if="showOperation" :fixed="tableOptions.operationColumn.fixed" :width="tableOptions.operationColumn.width">
+            <template #default="scope">
+                <slot name="operation" :row="scope.row"> </slot>
             </template>
         </el-table-column>
     </el-table>
 
-    <el-pagination
-        :background="tableOptions.pagination.background"
-        :layout="tableOptions.pagination.layout"
-        :page-size="tableOptions.pagination.pageSize"
-        :page-sizes="tableOptions.pagination.pageSizes"
-        :total="tableOptions.pagination.total"
-        @size-change="sizeChange"
-        @current-change="currentChange"
-    >
-    </el-pagination>
+    <div class="table-pagination">
+        <el-pagination
+            :background="tableOptions.pagination.background"
+            :layout="tableOptions.pagination.layout"
+            :page-size="tableOptions.pagination.pageSize"
+            :page-sizes="tableOptions.pagination.pageSizes"
+            :total="tableOptions.pagination.total"
+            :pager-count="tableOptions.pagination.pagerCount"
+            :small="tableOptions.pagination.small"
+            @size-change="sizeChange"
+            @current-change="currentChange"
+        >
+        </el-pagination>
+    </div>
 </template>
 
 <script>
@@ -52,39 +54,48 @@
         ]
     }
 **/
+import { defaultsDeep } from 'lodash'
 export default {
     props: ['tableData', 'option'],
+    setup() {},
     computed: {
         parentVue() {
             return this.parent || this.$parent
         },
+        showOperation() {
+            return this.tableOptions.operationColumn.show
+        }
     },
-    setup() {},
     created() {
-        this.tableOptions = Object.assign({}, this.option, this.defineTableOptions)
+        this.tableOptions = defaultsDeep(this.option, this.defineTableOptions)
         this.tableDatas = this.tableData || this.tableDatas
     },
     data() {
         return {
             dataEnums: {
                 prop: 'key',
-                label: 'label',
+                label: 'label'
             },
             defineTableOptions: {
                 columns: [
                     { key: 'date', label: '日期' },
                     { key: 'name', label: '姓名' },
                     { key: 'address', label: '地址' },
-                    { key: 'sex', label: '性别' },
+                    { key: 'sex', label: '性别' }
                 ],
                 sort: {
                     order: 'descending',
                     prop: () => {
                         return this.dataEnums.prop
-                    },
+                    }
                 },
                 table: {
-                    select: true,
+                    select: true
+                },
+                operationColumn: {
+                    show: true,
+                    width: 150,
+                    fixed: 'right'
                 },
                 pagination: {
                     pageSize: 10,
@@ -93,33 +104,34 @@ export default {
                     currentPage: 1,
                     layout: 'prev, pager, next,sizes',
                     background: true,
-                    small: false,
-                },
+                    small: true,
+                    pagerCount: 5
+                }
             },
             tableDatas: [
                 {
                     date: '2016-05-02',
                     name: '王小虎',
                     address: '上海市普陀区金沙江路 1518 弄',
-                    sex: 'male',
+                    sex: 'male'
                 },
                 {
                     date: '2016-05-04',
                     name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄',
+                    address: '上海市普陀区金沙江路 1518 弄'
                 },
                 {
                     date: '2016-05-01',
                     name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄',
+                    address: '上海市普陀区金沙江路 1518 弄'
                 },
                 {
                     date: '2016-05-03',
                     name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄',
-                },
+                    address: '上海市普陀区金沙江路 1518 弄'
+                }
             ],
-            tableOptions: {},
+            tableOptions: {}
         }
     },
     methods: {
@@ -135,15 +147,15 @@ export default {
         checkAttribute(item, type) {
             let row = this.option[type]
             if (!row) return
-            let result = row.find((wItem) => {
+            let result = row.find(wItem => {
                 if (wItem[item[this.dataEnums.prop]]) {
                     return wItem[item[this.dataEnums.prop]]
                 }
             })
             return result && result[item[this.dataEnums.prop]]
         },
-        sortChange(column, prop, order) {},
-    },
+        sortChange(column, prop, order) {}
+    }
 }
 </script>
 <style lang="less" scoped>
@@ -153,5 +165,9 @@ export default {
 
 .el-table .success-row {
     background: #f0f9eb;
+}
+.table-pagination {
+    text-align: right;
+    padding: 20px 0 0 0;
 }
 </style>

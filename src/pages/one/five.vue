@@ -1,10 +1,14 @@
 <template>
     <div>
         <d-table :option="option">
-            <template #default="data">
-                <span v-if="data.column.key == 'date'">
-                    THIS IS DATE RIGHT ? {{ data.row.date }}
+            <template #operation="data">
+                <span class="operation-column">
+                    <el-button size="mini" @click="alerts(data.row)">编辑</el-button>
+                    <el-button size="mini" @click="alerts(data.row)">编辑</el-button>
                 </span>
+            </template>
+            <template #default="data">
+                <span v-if="data.column.key == 'date'"> THIS IS DATE RIGHT ? {{ data.row.date }} </span>
                 <span v-else>
                     {{ data.row[data.column.key] }}
                 </span>
@@ -23,8 +27,17 @@ export default {
             option: {
                 width: [{ date: '280' }],
                 sortable: [{ date: true }],
-            },
+                operationColumn: {
+                    width: 150,
+                    fixed: 'right'
+                }
+            }
         }
     },
+    methods: {
+        alerts(val) {
+            alert(val)
+        }
+    }
 }
 </script>

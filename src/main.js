@@ -9,7 +9,11 @@ import router from './router/index.js'
 import store from './store/index'
 import App from './App.vue'
 
-createApp(App).use(router).use(store).use(ElementPlus, { locale }).mount('#app')
+createApp(App)
+    .use(router)
+    .use(store)
+    .use(ElementPlus, { locale })
+    .mount('#app')
 
 import { routes as routesConstent } from './router/index'
 
