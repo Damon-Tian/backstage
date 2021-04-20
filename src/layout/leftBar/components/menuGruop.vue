@@ -8,7 +8,7 @@
             <menu-group :menus="item.children"></menu-group>
         </el-submenu>
         <!-- 无子级路由 -->
-        <router-link :to="{ name: item.name }" v-else>
+        <router-link :to="{ name: item.name }" v-else :key="item.name">
             <el-menu-item :index="item.name">
                 <span>{{ item.name }}</span>
             </el-menu-item>
@@ -23,7 +23,7 @@ export default {
     setup() {},
     data() {
         return {}
-    }
+    },
 }
 </script>
 

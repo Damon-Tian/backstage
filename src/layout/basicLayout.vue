@@ -23,5 +23,6 @@ import headers from './header/header.vue'
 </script>
 
 <style lang="less">
+@import '@/layout/css/basic.less';
 @import '@/assets/style/normalize.css';
 </style>

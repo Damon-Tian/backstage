@@ -15,14 +15,18 @@
             </div>
             <div class="d-header-profile">
                 <span>{{ name }}</span>
-                <el-dropdown>
-                    <div><el-image></el-image><i class="el-icon-arrow-down el-icon--right"></i></div>
-                    <template #dropdown>
-                        <el-dropdown-menu>
-                            <el-dropdown-item>黄金糕</el-dropdown-item>
-                        </el-dropdown-menu>
-                    </template>
-                </el-dropdown>
+                <div>
+                    <el-dropdown class="d-profile">
+                        <div>
+                            <el-image></el-image><i class="el-icon-arrow-down el-icon--right"></i>
+                        </div>
+                        <template #dropdown>
+                            <el-dropdown-menu>
+                                <el-dropdown-item>黄金糕</el-dropdown-item>
+                            </el-dropdown-menu>
+                        </template>
+                    </el-dropdown>
+                </div>
             </div>
         </div>
         <div class="d-header-breadcrumb">
@@ -39,7 +43,7 @@ export default {
     data() {
         return {
             breadcrumb: [],
-            name: ''
+            name: '',
         }
     },
     created() {
@@ -52,10 +56,11 @@ export default {
                 const matched = Array.from(newValue.matched)
                 matched.splice(0, 1)
                 this.breadcrumb = matched
+                this.$store.commit('routes/setCurrentRoute', newValue)
             },
-            immediate: true
-        }
-    }
+            immediate: true,
+        },
+    },
 }
 </script>
 
@@ -73,6 +78,16 @@ export default {
                 padding-right: 17px;
             }
         }
+        .d-header-profile {
+            display: flex;
+            align-items: center;
+            & > * {
+                margin-left: 10px;
+                .d-profile {
+                    display: flex;
+                }
+            }
+        }
         .profile-image {
             width: 40px;
             height: 40px;
@@ -82,17 +97,5 @@ export default {
 .bread-item {
     display: inline-block;
     transition: all 0.4s ease;
-}
-.list-enter-active,
-.list-leave-active {
-    // transition: all 0.5s ease;
-}
-.list-leave-active {
-    position: absolute;
-}
-.list-enter-from,
-.list-leave-to {
-    opacity: 0;
-    transform: translateX(20px);
 }
 </style>

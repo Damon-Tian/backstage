@@ -1,13 +1,18 @@
 <template>
     <ul class="history-tab">
-        <li v-for="(item, index) in breads">
-            <router-link :to="item.path">
+        <transition-group name="list" tag="span">
+            <li
+                v-for="item in breads"
+                :key="item.name"
+                @click="redirect(item)"
+                :class="{ active: item.name == activeTab }"
+            >
                 {{ item.name }}
-                <span class="tab-cancel" v-if="item.path !== '/'" @click.native.stop="remove(item)">
+                <span class="tab-cancel" v-if="item.path !== '/'" @click.stop="remove(item)">
                     <i class="el-icon-close"></i>
                 </span>
-            </router-link>
-        </li>
+            </li>
+        </transition-group>
     </ul>
 </template>
 
@@ -19,13 +24,19 @@ export default {
     computed: {
         breads() {
             return this.$store.state.bread.breads
-        }
+        },
+        activeTab() {
+            return this.$store.state.routes.currentRoute.name
+        },
     },
     methods: {
+        redirect(item) {
+            this.$router.push({ name: item.name })
+        },
         remove(item) {
             this.$store.commit('bread/removeBread', item.name)
-        }
-    }
+        },
+    },
 }
 </script>
 
@@ -43,19 +54,22 @@ export default {
         border-radius: 2px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
         cursor: pointer;
+        transition: all 0.4s ease;
+        &.active {
+            color: red;
+            border: 1px solid red;
+        }
         .tab-cancel {
             transition: all 0.3s;
-            opacity: 0.8;
+            opacity: 0.3;
+            font-size: 12px;
             // border: 1px solid transparent;
             border-radius: 50%;
             display: inline-flex;
             justify-content: center;
             align-items: center;
-        }
-        &:hover {
-            .tab-cancel {
+            &:hover {
                 opacity: 0.7;
-                // border: 1px solid red;
                 background-color: rgba(0, 0, 0, 0.795);
                 color: white;
             }

@@ -349,3 +349,12 @@ template {
 [hidden] {
     display: none;
 }
+
+.list-leave-active {
+    position: absolute;
+}
+.list-enter-from,
+.list-leave-to {
+    opacity: 0;
+    transform: translateX(20px);
+}

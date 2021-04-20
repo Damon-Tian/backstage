@@ -17,56 +17,56 @@ export const routes = [
             {
                 path: '/',
                 name: '首页',
-                component: Home
+                component: Home,
             },
             {
                 path: '/one',
                 name: 'one',
                 component: One,
-                redirect: 'two',
+                redirect: '/one/two',
                 children: [
                     {
                         path: 'two',
                         name: 'two',
-                        component: Two
+                        component: Two,
                     },
                     {
                         path: 'three',
                         name: 'three',
                         component: Three,
-                        redirect: 'four',
+                        redirect: '/one/three/four',
                         children: [
                             {
                                 name: 'four',
                                 component: Four,
-                                path: 'four'
+                                path: 'four',
                             },
                             {
                                 name: 'five',
                                 component: Five,
-                                path: 'five'
-                            }
-                        ]
-                    }
-                ]
-            }
-        ]
+                                path: 'five',
+                            },
+                        ],
+                    },
+                ],
+            },
+        ],
     },
     {
         path: '/:pathMatch(.*)*',
         name: 'NotFound',
-        component: NotFound
+        component: NotFound,
     },
     {
         path: '/404',
         name: 'NotFound',
-        component: NotFound
-    }
+        component: NotFound,
+    },
 ]
 
 const router = createRouter({
     history: createWebHistory(),
-    routes
+    routes,
 })
 
 export default router

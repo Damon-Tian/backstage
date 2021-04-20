@@ -18,7 +18,7 @@ export default {
     setup() {},
     data() {
         return {
-            defaultActive: ''
+            defaultActive: '',
         }
     },
     created() {},
@@ -27,7 +27,7 @@ export default {
             const menus = this.$store.state.routes.routes[0].children
             console.log(menus)
             return menus
-        }
+        },
     },
     watch: {
         // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
@@ -44,9 +44,9 @@ export default {
                 this.defaultActive = lastPath[0].name
                 this.$store.commit('bread/addBread', newValue)
             },
-            immediate: true
-        }
-    }
+            immediate: true,
+        },
+    },
 }
 </script>
 
