@@ -8,6 +8,7 @@ const Two = () => import('@/pages/one/two.vue')
 const Three = () => import('@/pages/one/three.vue')
 const Four = () => import('@/pages/one/four.vue')
 const Five = () => import('@/pages/one/five.vue')
+const Six = () => import('@/pages/one/sxx.vue')
 export const routes = [
     {
         name: '',
@@ -21,30 +22,35 @@ export const routes = [
             },
             {
                 path: '/one',
-                name: 'one',
+                name: '组件相关',
                 component: One,
                 redirect: '/one/two',
                 children: [
                     {
                         path: 'two',
-                        name: 'two',
+                        name: '什么都没有',
                         component: Two,
                     },
                     {
                         path: 'three',
-                        name: 'three',
+                        name: '自定义组件',
                         component: Three,
                         redirect: '/one/three/four',
                         children: [
                             {
-                                name: 'four',
+                                name: '表单',
                                 component: Four,
                                 path: 'four',
                             },
                             {
-                                name: 'five',
+                                name: '表格',
                                 component: Five,
                                 path: 'five',
+                            },
+                            {
+                                name: '页面',
+                                component: Six,
+                                path: 'six',
                             },
                         ],
                     },

@@ -1,6 +1,3 @@
 <template>
-    this is one
-    <div>
-        <router-view />
-    </div>
+    <router-view />
 </template>

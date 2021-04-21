@@ -3,6 +3,7 @@
         <!-- 有子级路由 -->
         <el-submenu :index="item.name" :key="index" v-if="item.children">
             <template #title>
+                <i class="el-icon-menu"></i>
                 <span>{{ item.name }}</span>
             </template>
             <menu-group :menus="item.children"></menu-group>
@@ -10,7 +11,8 @@
         <!-- 无子级路由 -->
         <router-link :to="{ name: item.name }" v-else :key="item.name">
             <el-menu-item :index="item.name">
-                <span>{{ item.name }}</span>
+                <i class="el-icon-menu"></i>
+                <template #title>{{ item.name }}</template>
             </el-menu-item>
         </router-link>
     </template>

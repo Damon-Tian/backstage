@@ -47,30 +47,31 @@ export default {
     li {
         list-style: none;
         display: inline-block;
-        padding: 3px 8px;
+        padding: 5px 15px;
         margin-right: 10px;
         font-size: 12px;
-        border: 1px solid gainsboro;
         border-radius: 2px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
         cursor: pointer;
+        border: 1px solid transparent;
         transition: all 0.4s ease;
         &.active {
-            color: red;
-            border: 1px solid red;
+            color: @d-color;
+            border: 1px solid @d-color;
         }
         .tab-cancel {
             transition: all 0.3s;
             opacity: 0.3;
             font-size: 12px;
-            // border: 1px solid transparent;
+            position: relative;
+            left: 4px;
             border-radius: 50%;
             display: inline-flex;
             justify-content: center;
             align-items: center;
             &:hover {
                 opacity: 0.7;
-                background-color: rgba(0, 0, 0, 0.795);
+                background-color: @d-color;
                 color: white;
             }
         }

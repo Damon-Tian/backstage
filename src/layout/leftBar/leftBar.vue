@@ -3,9 +3,10 @@
         :default-active="defaultActive"
         :uniqueOpened="false"
         class="d-leftBar"
-        background-color="black"
+        background-color="#545c64"
         text-color="#fff"
         active-text-color="#ffd04b"
+        :collapse="isCollapse"
     >
         <menu-group :menus="menus"></menu-group>
     </el-menu>
@@ -27,6 +28,9 @@ export default {
             const menus = this.$store.state.routes.routes[0].children
             console.log(menus)
             return menus
+        },
+        isCollapse() {
+            return this.$store.state.bread.isCollapse
         },
     },
     watch: {
@@ -51,16 +55,26 @@ export default {
 </script>
 
 <style lang="less">
+@shadowWidth: 8px;
 .d-leftBar {
     min-height: 100vh;
     overflow: hidden;
     overflow-y: auto;
-    .el-menu-item:hover,
-    .is-active:hover,
-    .el-submenu__title:hover,
-    .el-menu-item:hover.is-active:hover {
-        background: rgba(255, 255, 255, 0.15) !important;
+    &.el-menu {
+        border: none;
+        box-shadow: 2px 0px @shadowWidth 0px rgba(0, 0, 0, 0.22);
+        width: calc(100% - @shadowWidth);
+        transition: none;
     }
+    // &:not(.el-menu--collapse) {
+    //     width: 200px;
+    // }
+    // .el-menu-item:hover,
+    // .is-active:hover,
+    // .el-submenu__title:hover,
+    // .el-menu-item:hover.is-active:hover {
+    // background: rgba(255, 255, 255, 0.15) !important;
+    // }
 }
 a {
     text-decoration: none;

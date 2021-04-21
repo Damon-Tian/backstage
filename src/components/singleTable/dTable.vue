@@ -1,16 +1,32 @@
 <template>
+    <div class="table-operation-head" v-if="tableOption.operationHead ? true : false">
+        <el-button
+            @click="button.fn"
+            :type="button.type"
+            :size="button.size || 'small'"
+            :plain="button.plain"
+            :circle="button.circle"
+            :disabled="button.disabled"
+            v-for="(button, index) in tableOption.operationHead"
+            :key="index"
+        >
+            {{ button.label }}
+        </el-button>
+    </div>
     <el-table
-        ref="singleTable"
+        ref="dTable"
         row-key="date"
         :data="tableDatas"
         style="width: 100%"
-        :row-class-name="tableRowClassName"
         :default-sort="option"
         @sort-change="sortChange"
+        @select="rowSelect"
+        @select-all="selectAll"
     >
-        <el-table-column type="selection" width="55" v-if="tableOptions.table.select"> </el-table-column>
+        <el-table-column type="selection" width="55" v-if="tableOption.table.select">
+        </el-table-column>
         <el-table-column
-            v-for="(item, index) in tableOptions.columns"
+            v-for="(item, index) in tableOption.columns"
             :key="index"
             :prop="item[dataEnums.prop]"
             :label="item[dataEnums.label]"
@@ -19,25 +35,50 @@
             :show-overflow-tooltip="true"
         >
             <template #default="scope">
-                <slot :row="scope.row" :index="scope.$index" :column="item" :store="scope.store" :columns="scope.column"></slot>
+                <slot
+                    :row="scope.row"
+                    :index="scope.$index"
+                    :column="item"
+                    :store="scope.store"
+                    :columns="scope.column"
+                >
+                    {{ scope.row[item[dataEnums.prop]] }}
+                </slot>
             </template>
         </el-table-column>
-        <el-table-column label="操作" v-if="showOperation" :fixed="tableOptions.operationColumn.fixed" :width="tableOptions.operationColumn.width">
-            <template #default="scope">
-                <slot name="operation" :row="scope.row"> </slot>
+        <el-table-column
+            label="操作"
+            v-if="showOperation"
+            :fixed="tableOption.operationColumn.fixed"
+            :width="tableOption.operationColumn.width"
+        >
+            <template
+                v-for="(button, index) in tableOption.operationColumn.operationArrys"
+                :key="index"
+            >
+                <el-button
+                    @click="button.fn"
+                    :type="button.type"
+                    :size="button.size || 'small'"
+                    :plain="button.plain"
+                    :circle="button.circle"
+                    :disabled="button.disabled"
+                >
+                    {{ button.label }}
+                </el-button>
             </template>
         </el-table-column>
     </el-table>
 
     <div class="table-pagination">
         <el-pagination
-            :background="tableOptions.pagination.background"
-            :layout="tableOptions.pagination.layout"
-            :page-size="tableOptions.pagination.pageSize"
-            :page-sizes="tableOptions.pagination.pageSizes"
-            :total="tableOptions.pagination.total"
-            :pager-count="tableOptions.pagination.pagerCount"
-            :small="tableOptions.pagination.small"
+            :background="tableOption.pagination.background"
+            :layout="tableOption.pagination.layout"
+            :page-size="tableOption.pagination.pageSize"
+            :page-sizes="tableOption.pagination.pageSizes"
+            :total="tableOption.pagination.total"
+            :pager-count="tableOption.pagination.pagerCount"
+            :small="tableOption.pagination.small"
             @size-change="sizeChange"
             @current-change="currentChange"
         >
@@ -48,6 +89,7 @@
 <script>
 /*
     option:{
+        operationHead
         width:[
             {date:200},
             {name:200}
@@ -63,80 +105,104 @@ export default {
             return this.parent || this.$parent
         },
         showOperation() {
-            return this.tableOptions.operationColumn.show
-        }
+            return this.option.operationColumn ? true : false
+        },
     },
     created() {
-        this.tableOptions = defaultsDeep(this.option, this.defineTableOptions)
+        this.tableOption = defaultsDeep({}, this.option, this.defaultTableOption)
         this.tableDatas = this.tableData || this.tableDatas
+    },
+    mounted() {
+        let bodyWrapper = document.getElementsByClassName('el-table__body-wrapper')[0]
+        this.getParentTop(bodyWrapper, 0)
+        bodyWrapper.style.height =
+            document.documentElement.offsetHeight - this.bodyHeihgt - 120 + 'px'
     },
     data() {
         return {
+            bodyHeihgt: '',
             dataEnums: {
                 prop: 'key',
-                label: 'label'
+                label: 'label',
             },
-            defineTableOptions: {
+            defaultTableOption: {
                 columns: [
-                    { key: 'date', label: '日期' },
-                    { key: 'name', label: '姓名' },
-                    { key: 'address', label: '地址' },
-                    { key: 'sex', label: '性别' }
+                    // { key: 'date', label: '日期' },
+                    // { key: 'name', label: '姓名' },
+                    // { key: 'address', label: '地址' },
+                    // { key: 'sex', label: '性别' },
                 ],
                 sort: {
                     order: 'descending',
                     prop: () => {
                         return this.dataEnums.prop
-                    }
+                    },
                 },
                 table: {
-                    select: true
+                    select: true,
                 },
                 operationColumn: {
                     show: true,
                     width: 150,
-                    fixed: 'right'
+                    fixed: 'right',
+                    operationArrys: [],
                 },
+                operationHead: [
+                    // 控制上方 类似 批量删除 按钮
+                ],
                 pagination: {
                     pageSize: 10,
                     pageSizes: [1, 2, 5, 40, 50],
-                    total: 10,
+                    total: 0,
                     currentPage: 1,
                     layout: 'prev, pager, next,sizes',
                     background: true,
                     small: true,
-                    pagerCount: 5
-                }
+                    pagerCount: 5,
+                },
             },
-            tableDatas: [
+            tableDataFake: [
                 {
                     date: '2016-05-02',
                     name: '王小虎',
                     address: '上海市普陀区金沙江路 1518 弄',
-                    sex: 'male'
+                    sex: 'male',
                 },
                 {
                     date: '2016-05-04',
                     name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
+                    address: '上海市普陀区金沙江路 1518 弄',
                 },
                 {
                     date: '2016-05-01',
                     name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
+                    address: '上海市普陀区金沙江路 1518 弄',
                 },
                 {
                     date: '2016-05-03',
                     name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }
+                    address: '上海市普陀区金沙江路 1518 弄',
+                },
             ],
-            tableOptions: {}
+            tableOption: {},
+            tableDatas: [
+                {
+                    date: '2016-05-03',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄',
+                },
+            ],
+            selectRow: [],
         }
     },
     methods: {
+        getData() {
+            let index = Math.ceil(Math.random() * this.tableDataFake.length)
+            this.tableDatas = this.tableDataFake.slice(0, index)
+            this.tableOption.pagination.total = this.tableDatas.length
+        },
         sizeChange(val) {
-            let { pageSize } = this.tableOptions.pagination
+            let { pageSize } = this.tableOption.pagination
             pageSize = val
         },
         prevClick() {},
@@ -145,17 +211,36 @@ export default {
             console.log(val, arr)
         },
         checkAttribute(item, type) {
-            let row = this.option[type]
+            let row = this.tableOption[type]
             if (!row) return
-            let result = row.find(wItem => {
+            let result = row.find((wItem) => {
                 if (wItem[item[this.dataEnums.prop]]) {
                     return wItem[item[this.dataEnums.prop]]
                 }
             })
             return result && result[item[this.dataEnums.prop]]
         },
-        sortChange(column, prop, order) {}
-    }
+        sortChange(column, prop, order) {},
+        currentChange() {},
+        getParentTop(DOM, firstValue) {
+            if (firstValue == 0) {
+                this.bodyHeihgt = firstValue
+            }
+            this.bodyHeihgt += DOM.offsetTop
+            if (DOM.offsetParent) {
+                if (DOM.parentElement.offsetTop == 0) {
+                    return
+                }
+                this.getParentTop(DOM.offsetParent)
+            }
+        },
+        rowSelect(selection, row) {
+            this.selectRow = selection
+        },
+        selectAll(selection) {
+            this.selectRow = selection
+        },
+    },
 }
 </script>
 <style lang="less" scoped>

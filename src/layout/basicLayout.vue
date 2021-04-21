@@ -1,6 +1,6 @@
 <template>
     <el-container>
-        <el-aside width="200px">
+        <el-aside class="asideBar" :style="{ width: collapse ? '75px' : '220px' }">
             <left-bar></left-bar>
         </el-aside>
         <el-container>
@@ -16,13 +16,23 @@
 
 <script setup>
 import { setTheme } from '@/assets/style/theme/index.js'
-setTheme()
-
 import leftBar from './leftBar/leftBar.vue'
 import headers from './header/header.vue'
+setTheme()
 </script>
-
+<script>
+export default {
+    computed: {
+        collapse() {
+            return this.$store.state.bread.isCollapse
+        },
+    },
+}
+</script>
 <style lang="less">
 @import '@/layout/css/basic.less';
 @import '@/assets/style/normalize.css';
+.asideBar {
+    transition: all 0.3s;
+}
 </style>

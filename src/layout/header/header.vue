@@ -2,7 +2,8 @@
     <div class="d-header">
         <div class="d-header-top">
             <div class="toggle-leftBar">
-                <i class="el-icon-s-fold"></i>
+                <i @click="setCollapse(!isCollapse)" v-if="!isCollapse" class="el-icon-s-fold"></i>
+                <i @click="setCollapse(!isCollapse)" v-else class="el-icon-s-unfold"></i>
                 <el-breadcrumb separator="/">
                     <transition-group name="list" tag="span">
                         <template v-for="item in breadcrumb" :key="item.path">
@@ -37,6 +38,7 @@
 
 <script>
 import HistoryTabs from './components/historyTabs.vue'
+import { mapMutations, mapState } from 'vuex'
 export default {
     components: { HistoryTabs },
     setup() {},
@@ -46,8 +48,14 @@ export default {
             name: '',
         }
     },
+    computed: {
+        ...mapState('bread', ['isCollapse']),
+    },
     created() {
         this.name = this.$store.state.user.name
+    },
+    methods: {
+        ...mapMutations('bread', ['setCollapse']),
     },
     watch: {
         // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
@@ -73,6 +81,9 @@ export default {
         justify-content: space-between;
         align-items: center;
         .toggle-leftBar {
+            i {
+                cursor: pointer;
+            }
             & > * {
                 display: inline-block;
                 padding-right: 17px;

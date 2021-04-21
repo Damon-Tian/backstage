@@ -6,8 +6,12 @@ export default {
     namespaced: true,
     state: {
         breads: [{ name: '首页', path: '/' }],
+        isCollapse: false,
     },
     mutations: {
+        setCollapse(state, val) {
+            state.isCollapse = val
+        },
         setBreads(state, breads) {
             state.breads = breads
         },
