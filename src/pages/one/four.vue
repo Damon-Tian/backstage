@@ -20,7 +20,7 @@ export default {
                             {
                                 validator: function (rule, value, callback) {
                                     if (value == 666) {
-                                        callback('恭喜你中奖了')
+                                        callback('恭喜你中奖了~')
                                     }
                                     callback()
                                 },
