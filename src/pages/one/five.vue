@@ -27,6 +27,7 @@ export default {
     data() {
         return {
             option: {
+                url: '/getForm',
                 columns: [{ prop: 'date', label: '日期x' }],
                 operationHead: [
                     {

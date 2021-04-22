@@ -1,13 +1,16 @@
 <template>
     <label class="d-search-block">
         <span>{{ label }}：</span>
+        <!-- :style="{ width: labelWidth }" -->
+        <!-- :style="{ width: `calc(100% - ${labelWidth})` }" -->
+
         <el-input v-model="value" :placeholder="placeholder"></el-input>
     </label>
 </template>
 
 <script>
 export default {
-    props: ['label', 'placeholder', 'value'],
+    props: ['label', 'placeholder', 'value', 'labelWidth'],
     watch: {
         value(val) {
             this.$emit('update:value', val)
@@ -21,5 +24,10 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    padding-bottom: 10px;
+    // width: 300px;
+    span {
+        white-space: nowrap;
+    }
 }
 </style>

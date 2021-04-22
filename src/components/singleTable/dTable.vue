@@ -1,5 +1,5 @@
 <template>
-    <div class="table-operation-head" v-if="tableOption.operationHead ? true : false">
+    <div class="table-operation-head" v-if="tableOption.operationHead.length">
         <el-button
             @click="button.fn"
             :type="button.type"
@@ -14,10 +14,12 @@
         </el-button>
     </div>
     <el-table
+        v-loading="loading"
         ref="dTable"
         row-key="date"
-        :data="tableDatas"
+        :data="tableData"
         style="width: 100%"
+        :stripe="tableOption.stripe"
         :default-sort="option"
         @sort-change="sortChange"
         @select="rowSelect"
@@ -52,20 +54,22 @@
             :fixed="tableOption.operationColumn.fixed"
             :width="tableOption.operationColumn.width"
         >
-            <template
-                v-for="(button, index) in tableOption.operationColumn.operationArrys"
-                :key="index"
-            >
-                <el-button
-                    @click="button.fn"
-                    :type="button.type"
-                    :size="button.size || 'small'"
-                    :plain="button.plain"
-                    :circle="button.circle"
-                    :disabled="button.disabled"
+            <template #default="scope">
+                <template
+                    v-for="(button, index) in tableOption.operationColumn.operationArray"
+                    :key="index"
                 >
-                    {{ button.label }}
-                </el-button>
+                    <el-button
+                        @click="button.fn(scope.row)"
+                        :type="button.type"
+                        :size="button.size || 'small'"
+                        :plain="button.plain"
+                        :circle="button.circle"
+                        :disabled="button.disabled"
+                    >
+                        {{ button.label }}
+                    </el-button>
+                </template>
             </template>
         </el-table-column>
     </el-table>
@@ -77,6 +81,7 @@
             :page-size="tableOption.pagination.pageSize"
             :page-sizes="tableOption.pagination.pageSizes"
             :total="tableOption.pagination.total"
+            :current-page="tableOption.pagination.page"
             :pager-count="tableOption.pagination.pagerCount"
             :small="tableOption.pagination.small"
             @size-change="sizeChange"
@@ -97,35 +102,41 @@
     }
 **/
 import { defaultsDeep } from 'lodash'
+import { getForm } from '@/api/user.js'
 export default {
-    props: ['tableData', 'option'],
+    props: ['option', 'searchValue'],
     setup() {},
     computed: {
-        parentVue() {
-            return this.parent || this.$parent
-        },
         showOperation() {
             return this.option.operationColumn ? true : false
         },
     },
     created() {
         this.tableOption = defaultsDeep({}, this.option, this.defaultTableOption)
-        this.tableDatas = this.tableData || this.tableDatas
+        this.getData()
     },
     mounted() {
-        let bodyWrapper = document.getElementsByClassName('el-table__body-wrapper')[0]
-        this.getParentTop(bodyWrapper, 0)
-        bodyWrapper.style.height =
-            document.documentElement.offsetHeight - this.bodyHeihgt - 120 + 'px'
+        if (this.tableOption.autoTableHeight) {
+            this.resizeTable()
+            window.addEventListener('resize', this.resizeTable)
+        }
+    },
+    beforeUnmount() {
+        if (this.tableOption.autoTableHeight) {
+            window.removeEventListener('resize', this.resizeTable)
+        }
     },
     data() {
         return {
+            loading: true,
             bodyHeihgt: '',
             dataEnums: {
                 prop: 'key',
                 label: 'label',
             },
             defaultTableOption: {
+                stripe: true,
+                autoTableHeight: true,
                 columns: [
                     // { key: 'date', label: '日期' },
                     // { key: 'name', label: '姓名' },
@@ -134,18 +145,17 @@ export default {
                 ],
                 sort: {
                     order: 'descending',
-                    prop: () => {
-                        return this.dataEnums.prop
-                    },
+                    prop: 'key',
                 },
                 table: {
                     select: true,
                 },
                 operationColumn: {
+                    //操作列属性
                     show: true,
                     width: 150,
-                    fixed: 'right',
-                    operationArrys: [],
+                    // fixed: 'right',
+                    operationArray: [], //操作按钮组
                 },
                 operationHead: [
                     // 控制上方 类似 批量删除 按钮
@@ -154,52 +164,47 @@ export default {
                     pageSize: 10,
                     pageSizes: [1, 2, 5, 40, 50],
                     total: 0,
-                    currentPage: 1,
+                    pageNum: 1,
                     layout: 'prev, pager, next,sizes',
                     background: true,
                     small: true,
                     pagerCount: 5,
                 },
             },
-            tableDataFake: [
-                {
-                    date: '2016-05-02',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄',
-                    sex: 'male',
-                },
-                {
-                    date: '2016-05-04',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄',
-                },
-                {
-                    date: '2016-05-01',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄',
-                },
-                {
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄',
-                },
-            ],
             tableOption: {},
-            tableDatas: [
-                {
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄',
-                },
-            ],
-            selectRow: [],
+            defaultParams: {
+                page: 1,
+                pageSize: 10,
+            },
+            selectRow: [], //选中的数据
+            tableData: [],
         }
     },
     methods: {
-        getData() {
-            let index = Math.ceil(Math.random() * this.tableDataFake.length)
-            this.tableDatas = this.tableDataFake.slice(0, index)
-            this.tableOption.pagination.total = this.tableDatas.length
+        resizeTable() {
+            let bodyWrapper = document.getElementsByClassName('el-table__body-wrapper')[0]
+            this.getParentTop(bodyWrapper, 0)
+            bodyWrapper.style.height =
+                document.documentElement.offsetHeight - this.bodyHeihgt - 120 + 'px'
+        },
+        async getData() {
+            this.loading = true
+            let { pageNum, pageSize } = this.tableOption.pagination
+            let { order, prop } = this.tableOption.sort
+            let params = {
+                pageNum,
+                pageSize,
+                order,
+                prop,
+                ...this.searchValue,
+            }
+            console.log(params)
+            let res = await getForm(this.tableOption.url, params)
+            if (res.suc) {
+                this.tableOption.pagination.total = res.data.length
+                this.tableData = res.data
+            }
+            this.loading = false
         },
         sizeChange(val) {
             let { pageSize } = this.tableOption.pagination
@@ -220,8 +225,20 @@ export default {
             })
             return result && result[item[this.dataEnums.prop]]
         },
-        sortChange(column, prop, order) {},
-        currentChange() {},
+        sortChange(column, prop, order) {
+            let sort = this.tableOption.sort
+            sort.prop = column.prop
+            sort.oder = column.order
+            this.getData()
+        },
+        sizeChange(val) {
+            this.tableOption.pagination.pageSize = val
+            this.tableOption.pagination.pageNum = 1
+        },
+        currentChange(val) {
+            this.tableOption.pagination.pageNum = val
+            this.getData()
+        },
         getParentTop(DOM, firstValue) {
             if (firstValue == 0) {
                 this.bodyHeihgt = firstValue
@@ -254,5 +271,8 @@ export default {
 .table-pagination {
     text-align: right;
     padding: 20px 0 0 0;
+}
+:deep(.el-table__body-wrapper) {
+    overflow-y: auto;
 }
 </style>

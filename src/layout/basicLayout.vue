@@ -7,7 +7,7 @@
             <el-header height="75px">
                 <headers></headers>
             </el-header>
-            <el-main>
+            <el-main style="height: calc(100vh - 75px)">
                 <router-view></router-view>
             </el-main>
         </el-container>
@@ -34,5 +34,9 @@ export default {
 @import '@/assets/style/normalize.css';
 .asideBar {
     transition: all 0.3s;
+}
+:deep(.el-main) {
+    height: calc(100vh - 75px);
+    overflow-y: auto;
 }
 </style>

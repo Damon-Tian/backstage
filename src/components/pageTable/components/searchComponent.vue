@@ -1,21 +1,23 @@
 <template>
     <div class="page-search">
         <div class="page-search-left">
-            <div class="search-item" v-for="item in option" :key="item">
+            <div class="search-item" v-for="item in option.searchArray" :key="item">
                 <d-input
                     v-if="item.type == 'input'"
                     :label="item.label"
                     :key="item.label"
-                    :placeholder="item.placeholder"
-                    v-model:value="searchValue[item.key]"
+                    :label-width="option.arrayWidth || '60px'"
+                    :placeholder="item.placeholder || `请输入${item.label}`"
+                    v-model:value="option.searchValue[item.key]"
                 ></d-input>
                 <d-select
                     v-else-if="item.type == 'select'"
                     :label="item.label"
                     :key="item.label"
                     :option="item.option"
+                    :label-width="option.arrayWidth || '60px'"
                     :placeholder="item.placeholder"
-                    v-model:value="searchValue[item.key]"
+                    v-model:value="option.searchValue[item.key]"
                 ></d-select>
             </div>
         </div>
@@ -37,8 +39,8 @@ export default {
     components: { dInput, dSelect },
     setup() {},
     created() {
-        this.option.forEach((item) => {
-            this.searchValue[item.key] = ''
+        this.option.searchArray.forEach((item) => {
+            this.option.searchValue[item.key] = ''
         })
     },
     data() {
@@ -49,7 +51,7 @@ export default {
     methods: {
         clearSearch() {
             for (let i in this.searchValue) {
-                this.searchValue[i] = ''
+                this.option.searchValue[i] = ''
             }
         },
         getData() {
@@ -63,7 +65,7 @@ export default {
 @width: 180px;
 .search-item {
     display: inline-block;
-    margin-right: 20px;
+    margin-right: 30px;
 }
 .page-search {
     display: flex;

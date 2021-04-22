@@ -26,7 +26,6 @@ export default {
     computed: {
         menus() {
             const menus = this.$store.state.routes.routes[0].children
-            console.log(menus)
             return menus
         },
         isCollapse() {

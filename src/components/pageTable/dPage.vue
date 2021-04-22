@@ -1,10 +1,15 @@
 <template>
     <search-component
-        v-if="pageOption.searchOption.length"
+        ref="search"
+        v-if="pageOption.searchOption.searchArray.length"
         :option="pageOption.searchOption"
         @getData="getData"
     ></search-component>
-    <d-table ref="dTable" :option="pageOption.tableOption">
+    <d-table
+        ref="dTable"
+        :option="pageOption.tableOption"
+        :searchValue="pageOption.searchOption.searchValue"
+    >
         <template #default="data">
             <slot
                 name="tableColumns"
@@ -13,7 +18,7 @@
                 :column="data.column"
                 :store="data.store"
             >
-                {{ data.row[data.column.prop] }}
+                {{ data.row[data.column.key] }}
             </slot>
         </template>
     </d-table>
@@ -34,32 +39,34 @@ export default {
         return {
             pageOption: {},
             pageDefaultOption: {
-                searchOption: [
-                    //key是searchValue的属性值，其余为自定义属性
-                    //此处length存在 search 自己放出
-                    // { key: 'name', type: 'input', label: 'name', placeholder: 'input yyy name' },
-                    {
-                        key: 'age',
-                        type: 'select',
-                        label: 'age',
-                        option: [
-                            { label: '2岁', value: 2 },
-                            { label: '4岁', value: 4 },
-                            { label: '全部', value: '' },
-                        ],
-                    },
-                ],
+                searchOption: {
+                    searchArray: [
+                        //key是searchValue的属性值，其余为自定义属性
+                        //此处length存在 search 自己放出
+                        // { key: 'name', type: 'input', label: 'name', placeholder: 'input yyy name' },
+                        // {
+                        //     key: 'age',
+                        //     type: 'select',
+                        //     label: 'age',
+                        //     option: [
+                        //         { label: '2岁', value: 2 },
+                        //         { label: '4岁', value: 4 },
+                        //         { label: '全部', value: '' },
+                        //     ],
+                        // },
+                    ],
+                    searchValue: {},
+                },
                 tableOption: {
-                    pagination: {
-                        pageSize: 2,
-                    },
+                    isSearch: true,
                 },
             },
         }
     },
     methods: {
         getData() {
-            this.$refs.dTable.getData()
+            let searchValue = this.$refs.search.searchValue
+            this.$refs.dTable.getData(searchValue)
         },
     },
 }
