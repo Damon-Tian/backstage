@@ -9,6 +9,7 @@ const Three = () => import('@/pages/one/three.vue')
 const Four = () => import('@/pages/one/four.vue')
 const Five = () => import('@/pages/one/five.vue')
 const Six = () => import('@/pages/one/sxx.vue')
+const Login = ()=> import('@/pages/login.vue')
 export const routes = [
     {
         name: '',
@@ -57,6 +58,11 @@ export const routes = [
                 ],
             },
         ],
+    },
+    {
+        path:'/login',
+        component:Login,
+        name:'login'
     },
     {
         path: '/:pathMatch(.*)*',

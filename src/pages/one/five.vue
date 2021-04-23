@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import dTable from '@/components/singleTable/dTable.vue'
+import dTable from '@/components/table/dTable.vue'
 export default {
     components: { dTable },
     setup() {},
@@ -42,7 +42,7 @@ export default {
                 // operationColumn: {
                 //     width: 150,
                 //     fixed: 'right',
-                //     operationArrys: [
+                //     operationArray: [
                 //         {
                 //             label: 'alert',
                 //             fn: () => {

@@ -52,7 +52,7 @@
             label="操作"
             v-if="showOperation"
             :fixed="tableOption.operationColumn.fixed"
-            :width="tableOption.operationColumn.width"
+            :width="operationColumnWidth"
         >
             <template #default="scope">
                 <template
@@ -110,6 +110,9 @@ export default {
         showOperation() {
             return this.option.operationColumn ? true : false
         },
+        operationColumnWidth() {
+            return this.option.operationColumn?.operationArray?.length * 100 + 40
+        },
     },
     created() {
         this.tableOption = defaultsDeep({}, this.option, this.defaultTableOption)
@@ -153,7 +156,6 @@ export default {
                 operationColumn: {
                     //操作列属性
                     show: true,
-                    width: 150,
                     // fixed: 'right',
                     operationArray: [], //操作按钮组
                 },

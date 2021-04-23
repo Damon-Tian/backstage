@@ -77,9 +77,9 @@ export default {
         position: absolute;
         left: 0;
         right: 0;
-        bottom: 0;
-        height: 5px;
-        box-shadow: 0 3px 5px rgba(0, 0, 0, 0.12);
+        bottom: 0px;
+        height: 4px;
+        background-image: linear-gradient(rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.01));
     }
     .page-search-left {
         width: calc(100% - @width);

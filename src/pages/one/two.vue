@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import dTable from '@/components/singleTable/dTable.vue'
+import dTable from '@/components/table/dTable.vue'
 export default {
     components: { dTable },
     data() {
@@ -16,7 +16,7 @@ export default {
                     { key: 'age', label: '年龄' },
                 ],
                 operationColumn: {
-                    operationArrys: [{ label: '删除', fn: this.deleteItem, type: 'danger' }],
+                    operationArray: [{ label: '删除', fn: this.deleteItem, type: 'danger' }],
                 },
                 url: '/getForm',
             },

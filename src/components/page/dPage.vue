@@ -26,7 +26,7 @@
 
 <script>
 import { defaultsDeep } from 'lodash'
-import dTable from '../singleTable/dTable.vue'
+import dTable from '../table/dTable.vue'
 import searchComponent from './components/searchComponent.vue'
 export default {
     props: ['option'],
