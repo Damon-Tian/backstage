@@ -30,4 +30,11 @@ export default defineConfig({
             },
         },
     },
+    proxy: {
+        // '/api': 'https://shaapi.wmelon.cn/sha',
+        '/api': {
+            target: 'https://shaapi.wmelon.cn/sha',
+            changeOrigin: true,
+        },
+    },
 })

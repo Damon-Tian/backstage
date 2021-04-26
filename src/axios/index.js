@@ -1,8 +1,7 @@
 import axios from 'axios'
 import { ElMessage as Message } from 'element-plus'
 const instance = axios.create({
-    baseURL: 'http://rap2api.taobao.org/app/mock/282064',
-    // baseURL: 'https://tj.wmelon.cn/l',
+    baseURL: '/api',
     // timeout: 5000,
 })
 
