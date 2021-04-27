@@ -200,11 +200,10 @@ export default {
                 prop,
                 ...this.searchValue,
             }
-            console.log(params)
             let res = await getForm(this.tableOption.url, params)
             if (res.suc) {
-                this.tableOption.pagination.total = res.data.length
-                this.tableData = res.data
+                this.tableOption.pagination.total = res.data.total
+                this.tableData = res.data.records
             }
             this.loading = false
         },

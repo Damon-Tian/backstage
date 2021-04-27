@@ -19,8 +19,9 @@ export default {
     actions: {
         async setRoutes({ state, commit }, routes) {
             let backRoutes = await asyncRoutes()
+            state.routes = backRoutes
             // state.routes = resetRoutes(backRoutes.data.routes)
-            // router.addRoute(state.routes[0])
+            await router.addRoute(...backRoutes)
             return true
         },
     },

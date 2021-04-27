@@ -30,8 +30,6 @@ export default {
 }
 </script>
 <style lang="less">
-@import '@/layout/css/basic.less';
-@import '@/assets/style/normalize.css';
 .asideBar {
     transition: all 0.3s;
 }

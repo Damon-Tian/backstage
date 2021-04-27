@@ -1,23 +1,23 @@
 import { login } from '@/api/user.js'
 export default {
     namespaced: true,
-    token: '',
     state: {
-        name: 'damon',
-        age: 17,
+        user: null,
+        token: '',
     },
 
     mutations: {
-        setUser(state, value) {
-            state.name = value
-            state.token = localStorage.setItem('token', 1)
+        setUser(state, data) {
+            state.user = data
+            state.token = data.tokenInfo
+            localStorage.setItem('token', state.token.token)
         },
     },
     actions: {
         async login({ commit }, data) {
-            let res = await login()
-            if (res) {
-                commit('setUser', 1)
+            let res = await login(data)
+            if (res.suc) {
+                commit('setUser', res.data)
                 return true
             }
         },

@@ -1,4 +1,5 @@
 <template>
+    <div class="backImg"></div>
     <div class="login">
         <l-input
             :option="{ label: '账号', icon: 'el-icon-user' }"
@@ -43,17 +44,22 @@ export default {
             }
             let res = await this.$store.dispatch('user/login', { username, password })
             if (res) {
-                // this.$router.push('/')
+                this.$router.push('/')
             }
         },
     },
 }
 </script>
 <style lang="less">
-body {
+@backImg: '@/assets/back.jpeg';
+// body {
+//     margin: 0;
+//     padding: 0;
+// }
+.backImg {
     width: 100%;
     height: 100vh;
-    background: black no-repeat center/1920px 1080px url('@/assets/back.jpeg');
+    background: rgba(0, 0, 0, 0.82) no-repeat center/1920px 1080px url(@backImg);
 }
 
 .login {
@@ -64,9 +70,9 @@ body {
     position: absolute;
     color: white;
     left: 50%;
-    top: 30%;
-    transform: translateX(-50%);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.62);
+    top: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.92);
     .back {
         width: 100%;
         height: 100%;
@@ -74,7 +80,7 @@ body {
         top: 0;
         position: absolute;
         border-radius: 10px;
-        background: no-repeat 50% 50% / 1920px 1080px url('@/assets/back.jpeg');
+        background: no-repeat 50% 50% / 1920px 1080px url(@backImg);
         filter: blur(10px);
         z-index: -1;
         // background-image: linear-gradient(rgba(0, 0, 0, 0.62), rgba(255, 255, 255, 0.545));

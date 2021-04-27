@@ -21,45 +21,58 @@ const frontRoutes = [
     { name: 'five', component: () => import('@/pages/one/five.vue') },
     { name: 'six', component: () => import('@/pages/one/sxx.vue') },
 ]
+// const BasicLayout = () => import('@/layout/basicLayout.vue')
+// const BasicLayout = () => import('@/layout/basicLayout.vue')
+// const BasicLayout = () => import('@/layout/basicLayout.vue')
+// const BasicLayout = () => import('@/layout/basicLayout.vue')
+// const BasicLayout = () => import('@/layout/basicLayout.vue')
 export const routes = [
     {
         path: '/',
-        name: '首页',
-        component: Home,
-    },
-    {
-        path: '/one',
-        name: '组件相关',
-        component: One,
-        redirect: '/one/two',
+        name: 'basic',
+        component: BasicLayout,
+        redirect: '',
         children: [
             {
-                path: 'two',
-                name: '什么都没有',
-                component: Two,
+                path: '',
+                name: '首页',
+                component: Home,
             },
             {
-                path: 'three',
-                name: '自定义组件',
-                component: Three,
-                redirect: '/one/three/four',
-                children: [
-                    {
-                        name: '表单',
-                        component: Four,
-                        path: 'four',
-                    },
-                    {
-                        name: '表格',
-                        component: Five,
-                        path: 'five',
-                    },
-                    {
-                        name: '页面',
-                        component: Six,
-                        path: 'six',
-                    },
-                ],
+                path: '/one',
+                name: '组件相关',
+                component: One,
+                // redirect: '/one/two',
+                // children: [
+                //     {
+                //         path: 'two',
+                //         name: '什么都没有',
+                //         component: Two,
+                //     },
+                //     {
+                //         path: 'three',
+                //         name: '自定义组件',
+                //         component: Three,
+                //         redirect: '/one/three/four',
+                //         children: [
+                //             {
+                //                 name: '表单',
+                //                 component: Four,
+                //                 path: 'four',
+                //             },
+                //             {
+                //                 name: '表格',
+                //                 component: Five,
+                //                 path: 'five',
+                //             },
+                //             {
+                //                 name: '页面',
+                //                 component: Six,
+                //                 path: 'six',
+                //             },
+                //         ],
+                //     },
+                // ],
             },
         ],
     },
@@ -75,11 +88,11 @@ export const constantRoutes = [
     //     name: 'NotFound',
     //     component: NotFound,
     // },
-    // {
-    //     path: '/404',
-    //     name: 'NotFound',
-    //     component: NotFound,
-    // },
+    {
+        path: '/404',
+        name: 'NotFound',
+        component: NotFound,
+    },
 ]
 export const resetRoutes = (routes, first) => {
     let resultRoutes = []

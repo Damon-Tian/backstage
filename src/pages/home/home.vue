@@ -1,22 +1,30 @@
 <template>
     <div>
-        <el-button @click="mock">mockkkk</el-button>
-
-        {{ routes }}
-            <l-input :option="{label:'姓名'}" v-model:value='name'></l-input>
-            <l-input :option="{label:'密码',type:'password'}" v-model:value='password'></l-input>
+        <d-page :option="option"></d-page>
+        <!-- homeeeeeeeee -->
     </div>
 </template>
- 
+
 <script>
 import axios from 'axios'
-import lInput from '@/components/loginInput/input.vue'
+import dPage from '@/components/page/dPage.vue'
 export default {
-    components:{lInput},
+    components: { dPage },
     data() {
         return {
-            name:'',
-            password:'',
+            option: {
+                tableOption: {
+                    url: '/merchant/page_list',
+                    columns: [
+                        { key: 'id', label: 'id' },
+                        { key: 'gmtCreate', label: '创建时间' },
+                    ],
+                    operationHead: [{ label: '新增', fn: this.deleteItem, type: 'primary' }],
+                    operationColumn: {
+                        operationArray: [{ label: '修改', fn: this.deleteItem }],
+                    },
+                },
+            },
         }
     },
     computed: {
