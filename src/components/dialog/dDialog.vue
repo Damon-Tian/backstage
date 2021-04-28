@@ -1,7 +1,7 @@
 <template>
     <div class="dDialog">
         <el-dialog
-            v-model="visible"
+            v-model="dialogVisible"
             :width="dialogOption.width"
             :title="dialogOption.title"
             :center="dialogOption.center"
@@ -28,19 +28,32 @@
 
 <script>
 import { defaultsDeep } from 'lodash'
+import { getFormById } from '@/api/user.js'
 export default {
-    props: ['option', 'visible'],
+    props: ['option'],
     setup() {},
-    created() {
-        this.dialogOption = defaultsDeep({}, this.option, this.defaultOption)
+    watch: {
+        'option.visible': {
+            handler(newValue, old) {
+                if (newValue == true) {
+                    this.beforeOpen()
+                } else {
+                    this.beforeClose()
+                }
+            },
+            deep: true,
+        },
     },
     data() {
         return {
+            loading: true,
+            dialogVisible: false,
             dialogOption: {},
             defaultOption: {
+                id: '', //判断是否提前获取数据
                 center: false,
                 title: '弹窗',
-                width: '50%',
+                width: '40%',
                 top: '15vh',
                 appendToBody: false,
                 closeOnClickModal: true,
@@ -52,6 +65,25 @@ export default {
                 confirm: () => {},
             },
         }
+    },
+    methods: {
+        async beforeOpen() {
+            this.dialogOption = defaultsDeep({}, this.option, this.defaultOption)
+            if (this.dialogOption.id) {
+                this.loading = this.$loading({
+                    lock: true,
+                    background: 'rgba(0,0,0,.5)',
+                })
+                let res = await getFormById(this.dialogOption.beforeDataUrl, this.dialogOption.id)
+                this.loading.close()
+                this.$emit('beforeDataGeted', res.data)
+            }
+            this.dialogVisible = true
+        },
+        beforeClose() {
+            this.$emit('closed')
+            this.dialogVisible = false
+        },
     },
 }
 </script>

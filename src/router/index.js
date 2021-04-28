@@ -10,6 +10,7 @@ const Four = () => import('@/pages/one/four.vue')
 const Five = () => import('@/pages/one/five.vue')
 const Six = () => import('@/pages/one/sxx.vue')
 const Login = () => import('@/pages/login.vue')
+const AddM = () => import('@/pages/home/addM.vue')
 const frontRoutes = [
     { name: 'BasicLayout', component: () => import('@/layout/basicLayout.vue') },
     { name: 'home', component: () => import('@/pages/home/home.vue') },
@@ -37,6 +38,7 @@ export const routes = [
                 path: '',
                 name: '首页',
                 component: Home,
+                // children: [{ path: '/add', component: AddM, name: 'Addm', hide: true }],
             },
             {
                 path: '/one',

@@ -47,5 +47,5 @@ export const post = (url, data = {}, option = {}) => {
     return instance.post(url, data, option)
 }
 export const get = (url, data = {}, option = {}) => {
-    return instance.get(url, data, option)
+    return instance.get(url, { params: { ...data } }, option)
 }

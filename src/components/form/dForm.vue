@@ -19,12 +19,14 @@
                 :style="{ width: formItem.width || formOption.inputWidth }"
                 v-model="formData[formItem.key]"
                 :placeholder="`请输入${formItem.label}`"
+                :disabled="formItem.disabled"
             ></el-input>
             <!-- select -->
             <el-select
                 v-else-if="formItem.type == 'select'"
                 v-model="formData[formItem.key]"
                 :placeholder="formItem.placeholder || '请选择'"
+                :disabled="formItem.disabled"
             >
                 <el-option
                     v-for="selectOption in formItem.options"
@@ -42,6 +44,9 @@
                 :inactive-text="formItem.inactive"
                 :active-color="formItem.activeColor"
                 :inactive-color="formItem.inactiveColor"
+                :active-value="formItem.activeValue"
+                :inactive-value="formItem.inactiveValue"
+                :disabled="formItem.disabled"
             >
             </el-switch>
             <!-- radio -->
@@ -50,6 +55,7 @@
                     :label="radio.label"
                     v-for="(radio, index) in formItem.options"
                     :key="index"
+                    :disabled="radio.disabled"
                 >
                     {{ radio.value }}
                 </el-radio>
@@ -71,6 +77,7 @@
                 :style="{ width: formItem.width || formOption.inputWidth }"
                 v-else-if="formItem.type == 'slider'"
                 v-model="formData[formItem.key]"
+                :disabled="formItem.disabled"
             ></el-slider>
             <!-- 日期选择 -->
             <el-date-picker
@@ -78,8 +85,38 @@
                 v-model="formData[formItem.key]"
                 type="date"
                 placeholder="选择日期"
+                :disabled="formItem.disabled"
             >
             </el-date-picker>
+            <!-- 上传文件 -->
+            <el-upload
+                v-else-if="formItem.type == 'upload'"
+                class="upload-demo"
+                :action="baseUrl + '/upload/upload_file'"
+                :headers="{ Authorization: $store.state.user.token }"
+                :on-remove="
+                    () => {
+                        formData[formItem.key] = ''
+                    }
+                "
+                :on-success="formItem.onSuccess"
+                :on-error="formItem.onError"
+                :limit="1"
+                :on-exceed="
+                    () => {
+                        $message({ type: 'error', message: '最多上传一个文件' })
+                    }
+                "
+            >
+                <img
+                    v-if="formData[formItem.key]"
+                    :src="formData[formItem.key]"
+                    style="object-fit: contain; display: block; height: 200px"
+                    :style="{ width: formItem.width ? formItem.width : '300px' }"
+                    alt="图片"
+                />
+                <el-button size="small" type="primary">点击上传</el-button>
+            </el-upload>
         </el-form-item>
         <el-form-item :style="{ textAlign: formOption.buttonAlign }">
             <el-button type="primary" @click="onSubmit">确定</el-button>
@@ -94,6 +131,7 @@ export default {
     props: ['option'],
     data() {
         return {
+            baseUrl: 'https://adminapi.wmelon.cn/sha',
             formOption: {}, //最终的option
             defaultFormOption: {
                 inline: false,
@@ -110,8 +148,24 @@ export default {
     created() {
         this.formOption = defaultsDeep({}, this.option, this.defaultFormOption)
         this.pushRules()
+        this.setFormData()
+    },
+    watch: {
+        'option.formData': {
+            handler() {
+                this.formOption = defaultsDeep({}, this.option, this.defaultFormOption)
+                this.pushRules()
+                this.setFormData()
+            },
+            deep: true,
+        },
     },
     methods: {
+        setFormData() {
+            if (Object.keys(this.option.formData).length) {
+                this.formData = defaultsDeep({}, this.option.formData, this.formData)
+            }
+        },
         onSubmit() {
             this.$refs['dForm'].validate((valid) => {
                 if (valid) {
@@ -120,13 +174,16 @@ export default {
             })
         },
         clearForm() {
-            this.$refs.dForm.resetFields()
+            for (let i in this.formData) {
+                this.formData[i] = this.option.formData[i] || null
+            }
+            // this.$refs.dForm.resetFields()
         },
         pushRules() {
             let forms = (this.forms = this.formOption.forms)
             forms.forEach((form, index) => {
                 //默认设置
-                this.formData[form.key] = form.defaultValue
+                this.formData[form.key] = form.defaultValue || null
 
                 let rules = []
                 form.rules &&

@@ -358,3 +358,7 @@ template {
     opacity: 0;
     transform: translateX(20px);
 }
+
+img {
+    pointer-events: none;
+}

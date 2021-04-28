@@ -29,11 +29,6 @@ export default {
             code: '',
         }
     },
-    computed: {
-        routes() {
-            return this.$store.state.routes.routes
-        },
-    },
     methods: {
         async login() {
             let { username, password, code } = this

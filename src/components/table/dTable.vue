@@ -1,17 +1,39 @@
 <template>
     <div class="table-operation-head" v-if="tableOption.operationHead.length">
-        <el-button
-            @click="button.fn"
-            :type="button.type"
-            :size="button.size || 'small'"
-            :plain="button.plain"
-            :circle="button.circle"
-            :disabled="button.disabled"
-            v-for="(button, index) in tableOption.operationHead"
-            :key="index"
-        >
-            {{ button.label }}
-        </el-button>
+        <template v-for="(button, index) in tableOption.operationHead" :key="index">
+            <el-button
+                v-if="button.type != 'danger'"
+                @click="button.fn"
+                :type="button.type"
+                :size="button.size || 'small'"
+                :plain="button.plain"
+                :circle="button.circle"
+                :disabled="button.disabled"
+            >
+                {{ button.label }}
+            </el-button>
+            <el-popconfirm
+                v-else
+                confirmButtonText="删除"
+                cancelButtonText="取消"
+                icon="el-icon-info"
+                iconColor="red"
+                title="确定删除吗？"
+                @confirm="button.fn"
+            >
+                <template #reference>
+                    <el-button
+                        :type="button.type"
+                        :size="button.size || 'small'"
+                        :plain="button.plain"
+                        :circle="button.circle"
+                        :disabled="button.disabled"
+                    >
+                        {{ button.label }}
+                    </el-button>
+                </template>
+            </el-popconfirm>
+        </template>
     </div>
     <el-table
         v-loading="loading"
@@ -60,15 +82,37 @@
                     :key="index"
                 >
                     <el-button
+                        v-if="button.type != 'danger'"
                         @click="button.fn(scope.row)"
                         :type="button.type"
                         :size="button.size || 'small'"
-                        :plain="button.plain"
+                        :plain="button.plain == false ? false : true"
                         :circle="button.circle"
                         :disabled="button.disabled"
                     >
                         {{ button.label }}
                     </el-button>
+                    <el-popconfirm
+                        v-else
+                        confirmButtonText="删除"
+                        cancelButtonText="取消"
+                        icon="el-icon-info"
+                        iconColor="red"
+                        title="  确定删除吗？"
+                        @confirm="button.fn(scope.row)"
+                    >
+                        <template #reference>
+                            <el-button
+                                :type="button.type"
+                                :size="button.size || 'small'"
+                                :plain="button.plain == false ? false : true"
+                                :circle="button.circle"
+                                :disabled="button.disabled"
+                            >
+                                {{ button.label }}
+                            </el-button>
+                        </template>
+                    </el-popconfirm>
                 </template>
             </template>
         </el-table-column>
@@ -111,7 +155,7 @@ export default {
             return this.option.operationColumn ? true : false
         },
         operationColumnWidth() {
-            return this.option.operationColumn?.operationArray?.length * 100 + 40
+            return this.option.operationColumn?.operationArray?.length * 80
         },
     },
     created() {
@@ -207,10 +251,6 @@ export default {
             }
             this.loading = false
         },
-        sizeChange(val) {
-            let { pageSize } = this.tableOption.pagination
-            pageSize = val
-        },
         prevClick() {},
         nextClick() {},
         handleSelectionChange(val, arr) {
@@ -235,6 +275,7 @@ export default {
         sizeChange(val) {
             this.tableOption.pagination.pageSize = val
             this.tableOption.pagination.pageNum = 1
+            this.getData()
         },
         currentChange(val) {
             this.tableOption.pagination.pageNum = val

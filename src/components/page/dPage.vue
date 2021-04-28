@@ -65,7 +65,7 @@ export default {
     },
     methods: {
         getData() {
-            let searchValue = this.$refs.search.searchValue
+            let searchValue = (this.$refs.search && this.$refs.search.searchValue) || {}
             this.$refs.dTable.getData(searchValue)
         },
     },
