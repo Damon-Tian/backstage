@@ -52,6 +52,7 @@ export default {
                         key: 'password',
                         label: '密码',
                         type: 'input',
+                        rules: ['required'],
                     },
                     {
                         key: 'address',
@@ -137,15 +138,9 @@ export default {
     },
     methods: {
         getEnum() {
-            let arr = this.$store.state.user.enums
+            let arr = this.$store.state.user.statusEnums
             if (arr.length) {
-                let options = arr.map((item) => {
-                    return {
-                        value: item.name,
-                        label: item.value,
-                    }
-                })
-                this.formOption.forms.find((item) => item.key == 'status').options = options
+                this.formOption.forms.find((item) => item.key == 'status').options = arr
             } else {
                 setTimeout(() => {
                     this.getEnum()
@@ -163,7 +158,7 @@ export default {
         },
         async confirm(formData) {
             let res = ''
-            if (formData.id) {
+            if (formData.id > 0) {
                 res = await updateMerchant(formData)
             } else {
                 res = await addMerchant(formData)

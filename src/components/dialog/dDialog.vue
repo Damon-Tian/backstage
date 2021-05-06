@@ -77,6 +77,8 @@ export default {
                 let res = await getFormById(this.dialogOption.beforeDataUrl, this.dialogOption.id)
                 this.loading.close()
                 this.$emit('beforeDataGeted', res.data)
+            } else {
+                this.$emit('beforeDataGeted', {})
             }
             this.dialogVisible = true
         },

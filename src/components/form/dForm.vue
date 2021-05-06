@@ -117,6 +117,26 @@
                 />
                 <el-button size="small" type="primary">点击上传</el-button>
             </el-upload>
+            <!-- 树 -->
+            <el-tree
+                v-else-if="formItem.type == 'tree'"
+                :data="formItem.options"
+                show-checkbox
+                default-expand-all
+                node-key="id"
+                ref="tree"
+                :check-strictly="formItem.checkStrictly || false"
+                highlight-current
+                @check="(() => check(formItem))()"
+                :props="
+                    formItem.defaultProps || {
+                        children: 'children',
+                        label: 'label',
+                    }
+                "
+            >
+            </el-tree>
+            <span v-else-if="(formItem.type = 'supply')">{{ formItem.supply }}</span>
         </el-form-item>
         <el-form-item :style="{ textAlign: formOption.buttonAlign }">
             <el-button type="primary" @click="onSubmit">确定</el-button>
@@ -152,7 +172,7 @@ export default {
     },
     watch: {
         'option.formData': {
-            handler() {
+            handler(val, oldVal, x, y) {
                 this.formOption = defaultsDeep({}, this.option, this.defaultFormOption)
                 this.pushRules()
                 this.setFormData()
@@ -161,8 +181,16 @@ export default {
         },
     },
     methods: {
+        check(formItem) {
+            // formItem
+            return (item, { checkedNodes, checkedKeys, halfCheckedNodes, halfCheckedKeys }) => {
+                this.$refs.tree.setCheckedKeys([item.id])
+                this.formData[formItem.key] = item.id
+                // console.log(checkedNodes, checkedKeys, halfCheckedNodes, halfCheckedKeys, item)
+            }
+        },
         setFormData() {
-            if (Object.keys(this.option.formData).length) {
+            if (this.option.formData && Object.keys(this.option.formData).length) {
                 this.formData = defaultsDeep({}, this.option.formData, this.formData)
             }
         },
@@ -175,7 +203,7 @@ export default {
         },
         clearForm() {
             for (let i in this.formData) {
-                this.formData[i] = this.option.formData[i] || null
+                this.formData[i] = (this.option.formData && this.option.formData[i]) || null
             }
             // this.$refs.dForm.resetFields()
         },

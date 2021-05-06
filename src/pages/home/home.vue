@@ -4,17 +4,32 @@
             <template #tableColumns="data">
                 <span v-if="data.column.key == 'headImg' || data.column.key == 'homeCarouselJson'">
                     <img
+                        v-if="data.row[data.column.key]"
                         style="width: 250px; height: 150px; object-fit: cover"
                         :src="data.row[data.column.key]"
                         alt="暂无图片"
                     />
+                    <div
+                        style="
+                            width: 250px;
+                            height: 80px;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: center;
+                            align-items: center;
+                        "
+                        v-else
+                    >
+                        <i class="el-icon-cloudy" style="font-size: 2rem"></i>
+                        <span>暂无图片</span>
+                    </div>
                 </span>
                 <span v-else>
                     {{ data.row[data.column.key] }}
                 </span>
             </template>
         </d-page>
-        <add @confirm="confirm" ref="addM"></add>
+        <add @confirm="confirm" ref="addM" @closed="closed"></add>
     </div>
 </template>
 
@@ -59,13 +74,14 @@ export default {
         },
     },
     methods: {
+        closed() {},
         edit(item) {
             this.$refs.addM.dialogOption.id = item.id
             this.$refs.addM.dialogOption.visible = true
         },
         addM() {
             this.$refs.addM.dialogOption.id = ''
-            this.$refs.addM.dialogOption.formData = {}
+            this.$refs.addM.dialogOption.formData = new Object()
             this.$refs.addM.dialogOption.visible = true
         },
         async delete(row) {

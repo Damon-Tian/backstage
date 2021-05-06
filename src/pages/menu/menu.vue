@@ -29,7 +29,7 @@
                 </span>
             </template>
         </d-page>
-        <add @confirm="confirm" ref="addM" @closed="closed"></add>
+        <add @confirm="confirm" ref="addM" @closed="closed" :menuList="menuList"></add>
     </div>
 </template>
 
@@ -44,13 +44,11 @@ export default {
             option: {
                 tableOption: {
                     width: [{ headImg: '300px' }, { homeCarouselJson: '300px' }],
-                    url: '/member/page_list',
+                    url: '/sys_menu/list_tree',
                     columns: [
-                        { key: 'memberName', label: '用户名' },
-                        { key: 'headImg', label: '头像' },
-                        { key: 'memberNo', label: '用户编号' },
-                        { key: 'merchantNo', label: '商家编号' },
-                        { key: 'integral', label: '积分' },
+                        { key: 'menuName', label: '菜单名称' },
+                        { key: 'menuType', label: '菜单类型' },
+                        { key: 'parentName', label: '父级菜单' },
                     ],
                     operationHead: [
                         { label: '新增', fn: this.addM, type: 'primary' },
@@ -63,11 +61,17 @@ export default {
                         ],
                     },
                 },
+                getedData: this.getMenuList,
             },
+            menuList: [],
         }
     },
     computed: {},
     methods: {
+        getMenuList(data) {
+            this.menuList = data
+            return
+        },
         closed() {},
         edit(item) {
             this.$refs.addM.dialogOption.id = item.id

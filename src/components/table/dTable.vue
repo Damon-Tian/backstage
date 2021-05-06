@@ -38,7 +38,7 @@
     <el-table
         v-loading="loading"
         ref="dTable"
-        row-key="date"
+        row-key="id"
         :data="tableData"
         style="width: 100%"
         :stripe="tableOption.stripe"
@@ -46,7 +46,9 @@
         @sort-change="sortChange"
         @select="rowSelect"
         @select-all="selectAll"
+        :tree-props="tableOption.rowChildren"
     >
+        >
         <el-table-column type="selection" width="55" v-if="tableOption.table.select">
         </el-table-column>
         <el-table-column
@@ -149,6 +151,7 @@ import { defaultsDeep } from 'lodash'
 import { getForm } from '@/api/user.js'
 export default {
     props: ['option', 'searchValue'],
+    emits: ['getedData'],
     setup() {},
     computed: {
         showOperation() {
@@ -216,6 +219,10 @@ export default {
                     small: true,
                     pagerCount: 5,
                 },
+                rowChildren: {
+                    children: 'subList',
+                    hasChildren: true,
+                },
             },
             tableOption: {},
             defaultParams: {
@@ -247,7 +254,8 @@ export default {
             let res = await getForm(this.tableOption.url, params)
             if (res.suc) {
                 this.tableOption.pagination.total = res.data.total
-                this.tableData = res.data.records
+                this.tableData = res.data.records || res.data
+                this.$emit('getedData', res.data)
             }
             this.loading = false
         },

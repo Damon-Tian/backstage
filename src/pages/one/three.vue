@@ -1,3 +1,3 @@
 <template>
-    <router-view />
+    <div>22</div>
 </template>

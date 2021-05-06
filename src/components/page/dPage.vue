@@ -7,6 +7,7 @@
     ></search-component>
     <d-table
         ref="dTable"
+        @getedData="pageOption.getedData"
         :option="pageOption.tableOption"
         :searchValue="pageOption.searchOption.searchValue"
     >

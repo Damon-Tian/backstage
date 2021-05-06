@@ -33,6 +33,33 @@ export function getFormById(url, id) {
 export function upload(file) {
     return get('/upload/upload_file', file)
 }
-export function getEnum() {
+export function getStatusEnum() {
     return get('/anon/getEnum/cn.wmelon.commoncore.enums.StatusEnum')
+}
+export function getMenuTypeEnum() {
+    return get('/anon/getEnum/cn.wmelon.commoncore.enums.MenuTypeEnum')
+}
+//菜单权限
+//获取菜单列表
+export function getMenuList() {
+    return get('/sys_menu/list')
+}
+//根据 id 获取菜单权限
+export function getMenuListById(id) {
+    return get('/sys_menu/info/' + id)
+}
+
+//用户相关
+//用户列表
+export function getMemberList() {
+    return get('/member/page_list')
+}
+export function updateMember(params) {
+    return post('/member/update', params, { alert: true })
+}
+export function deleteMember(params) {
+    return post('/member/deleteBatch', params, { alert: true })
+}
+export function addMember(params) {
+    return post('/member/save', params, { alert: true })
 }
