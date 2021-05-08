@@ -5,11 +5,11 @@
         class="d-leftBar"
         background-color="#545c64"
         text-color="#fff"
-        active-text-color="#ffd04b"
         :collapse="isCollapse"
     >
         <menu-group :menus="menus"></menu-group>
     </el-menu>
+    <!-- active-text-color="#ffd04b" -->
 </template>
 
 <script>

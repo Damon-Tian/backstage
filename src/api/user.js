@@ -48,6 +48,12 @@ export function getMenuList() {
 export function getMenuListById(id) {
     return get('/sys_menu/info/' + id)
 }
+export function menuSave(params) {
+    return post('/sys_menu/save', params, { alert: true })
+}
+export function menuUpdate(params) {
+    return post('/sys_menu/update', params, { alert: true })
+}
 
 //用户相关
 //用户列表

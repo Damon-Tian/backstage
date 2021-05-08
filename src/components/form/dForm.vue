@@ -49,6 +49,16 @@
                 :disabled="formItem.disabled"
             >
             </el-switch>
+            <!-- number -->
+
+            <el-input-number
+                v-else-if="formItem.type == 'number'"
+                v-model="formData[formItem.key]"
+                :min="formItem.min || 0"
+                :max="formItem.max || 100"
+                :label="formItem.label"
+            ></el-input-number>
+
             <!-- radio -->
             <el-radio-group v-else-if="formItem.type == 'radio'" v-model="formData[formItem.key]">
                 <el-radio
@@ -136,7 +146,10 @@
                 "
             >
             </el-tree>
-            <span v-else-if="(formItem.type = 'supply')">{{ formItem.supply }}</span>
+            <!-- 补充信息 -->
+            <span v-else-if="(formItem.type = 'supply')" :style="formItem.style">{{
+                formItem.supply
+            }}</span>
         </el-form-item>
         <el-form-item :style="{ textAlign: formOption.buttonAlign }">
             <el-button type="primary" @click="onSubmit">确定</el-button>
@@ -184,8 +197,19 @@ export default {
         check(formItem) {
             // formItem
             return (item, { checkedNodes, checkedKeys, halfCheckedNodes, halfCheckedKeys }) => {
-                this.$refs.tree.setCheckedKeys([item.id])
-                this.formData[formItem.key] = item.id
+                if (item.id == this.formData.id || item.parentId == this.formData.id) {
+                    this.$refs.tree.setCheckedKeys([])
+                    this.formData[formItem.key] = formItem.defaultValue
+                    return
+                }
+                if (checkedKeys.length) {
+                    this.$refs.tree.setCheckedKeys([item.id])
+                    this.formData[formItem.key] = item.id
+                } else {
+                    this.$refs.tree.setCheckedKeys([])
+                    this.formData[formItem.key] = formItem.defaultValue
+                }
+                // formItem.check(this.$refs.tree)
                 // console.log(checkedNodes, checkedKeys, halfCheckedNodes, halfCheckedKeys, item)
             }
         },

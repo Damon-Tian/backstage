@@ -23,6 +23,10 @@ export default {
             })
             state[data.type] = arr
         },
+        clearToken(state, data) {
+            window.localStorage.setItem('token', '')
+            state.token = ''
+        },
     },
     actions: {
         async login({ commit }, data) {

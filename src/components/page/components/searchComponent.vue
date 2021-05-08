@@ -40,7 +40,7 @@ export default {
     setup() {},
     created() {
         this.option.searchArray.forEach((item) => {
-            this.option.searchValue[item.key] = ''
+            this.option.searchValue[item.key] = item.defaultValue || ''
         })
     },
     data() {

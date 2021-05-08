@@ -247,8 +247,9 @@ export default {
             let params = {
                 pageNum,
                 pageSize,
-                order,
-                prop,
+                // order,
+                // prop,
+                // key: true,
                 ...this.searchValue,
             }
             let res = await getForm(this.tableOption.url, params)

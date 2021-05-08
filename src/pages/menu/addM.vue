@@ -17,7 +17,7 @@
 <script>
 import dDialog from '@/components/dialog/dDialog.vue'
 import dForm from '@/components/form/dForm.vue'
-import { addMember, updateMember } from '@/api/user.js'
+import { addMember, updateMember, menuUpdate, menuSave } from '@/api/user.js'
 export default {
     components: { dForm, dDialog },
     props: ['menuList'],
@@ -69,11 +69,16 @@ export default {
                             children: 'subList',
                             label: 'menuName',
                         },
+                        defaultValue: 0,
                         options: [],
                     },
                     {
                         type: 'supply',
-                        supply: '不选，则默认根目录',
+                        supply: '(不选，则默认根目录)',
+                        style: {
+                            color: 'gray',
+                            fontSize: '13px',
+                        },
                     },
                     {
                         key: 'menuType',
@@ -81,6 +86,21 @@ export default {
                         label: '菜单类型',
                         rules: ['required'],
                         options: menuTypes,
+                    },
+                    {
+                        key: 'perms',
+                        type: 'input',
+                        label: '权限字符串',
+                    },
+                    {
+                        key: 'sort',
+                        type: 'number',
+                        label: '排序（0最大）',
+                    },
+                    {
+                        key: 'url',
+                        type: 'input',
+                        label: '菜单路由',
                     },
                 ],
             },
@@ -102,20 +122,24 @@ export default {
         },
         beforeDataGeted(formData) {
             this.formOption.formData = formData
-            this.$refs?.form?.$refs?.tree.setCheckedKeys([formData.id])
+            let pId = this.formOption.formData.parentId
+            pId ? '' : (pId = 0)
+            setTimeout(() => {
+                this.$refs?.form?.$refs?.tree.setCheckedKeys([pId])
+            }, 0)
         },
         async confirm(formData) {
             let res = ''
             console.log(formData)
-            // if (formData.id > -1) {
-            //     res = await updateMember(formData)
-            // } else {
-            //     res = await addMember(formData)
-            // }
-            // if (res.suc) {
-            //     this.$emit('confirm')
-            //     this.dialogOption.visible = false
-            // }
+            if (formData.id > 0) {
+                res = await menuUpdate(formData)
+            } else {
+                res = await menuSave(formData)
+            }
+            if (res.suc) {
+                this.$emit('confirm')
+                this.dialogOption.visible = false
+            }
         },
     },
 }

@@ -33,7 +33,8 @@ instance.interceptors.response.use(
             return res.data
         } else {
             if (res.data.code == 401) {
-                // window.location.href = location.origin + '/login'
+                store.commit('user/clearToken')
+                window.location.href = location.origin + '/login'
             }
             Message({ message: res.data.msg, type: 'error' })
             return Promise.reject(res.data.msg)

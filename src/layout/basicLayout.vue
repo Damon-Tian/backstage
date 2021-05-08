@@ -1,6 +1,6 @@
 <template>
     <el-container>
-        <el-aside class="asideBar" :style="{ width: collapse ? '75px' : '220px' }">
+        <el-aside class="asideBar" :style="{ width: collapse ? '75px' : '208px' }">
             <left-bar></left-bar>
         </el-aside>
         <el-container>
