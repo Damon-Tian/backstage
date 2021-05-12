@@ -51,11 +51,11 @@ export default {
             option: {
                 searchOption: {
                     searchArray: [
-                        {
-                            key: 'email',
-                            type: 'input',
-                            label: '邮箱',
-                        },
+                        // {
+                        //     key: 'email',
+                        //     type: 'input',
+                        //     label: '邮箱',
+                        // },
                         {
                             key: 'isConsumables',
                             type: 'select',

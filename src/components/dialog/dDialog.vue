@@ -51,6 +51,7 @@ export default {
             dialogOption: {},
             defaultOption: {
                 id: '', //判断是否提前获取数据
+                beforeGetData: true,
                 center: false,
                 title: '弹窗',
                 width: '40%',
@@ -69,7 +70,7 @@ export default {
     methods: {
         async beforeOpen() {
             this.dialogOption = defaultsDeep({}, this.option, this.defaultOption)
-            if (this.dialogOption.id) {
+            if (this.dialogOption.id && this.dialogOption.beforeGetData) {
                 this.loading = this.$loading({
                     lock: true,
                     background: 'rgba(0,0,0,.5)',

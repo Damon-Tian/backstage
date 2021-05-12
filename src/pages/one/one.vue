@@ -1,3 +1,4 @@
+// 用户相关
 <template>
     <div>
         <d-page ref="dPage" :option="option">
@@ -30,6 +31,7 @@
             </template>
         </d-page>
         <add @confirm="confirm" ref="addM" @closed="closed"></add>
+        <add-integral @confirm="confirm" ref="addIntegral"></add-integral>
     </div>
 </template>
 
@@ -37,8 +39,9 @@
 import dPage from '@/components/page/dPage.vue'
 import { deleteMember, getMemberList } from '@/api/user.js'
 import add from './addM.vue'
+import addIntegral from './addIntegral.vue'
 export default {
-    components: { dPage, add },
+    components: { dPage, add, addIntegral },
     data() {
         return {
             option: {
@@ -46,7 +49,7 @@ export default {
                     width: [{ headImg: '300px' }, { homeCarouselJson: '300px' }],
                     url: '/member/page_list',
                     columns: [
-                        { key: 'memberName', label: '用户名' },
+                        { key: 'phone', label: '手机号码' },
                         { key: 'headImg', label: '头像' },
                         { key: 'memberNo', label: '用户编号' },
                         { key: 'merchantNo', label: '商家编号' },
@@ -58,6 +61,7 @@ export default {
                     ],
                     operationColumn: {
                         operationArray: [
+                            { label: '加积分', fn: this.addIntegral, type: 'primary' },
                             { label: '修改', fn: this.edit, type: 'primary' },
                             { label: '删除', fn: this.delete, type: 'danger' },
                         ],
@@ -66,7 +70,11 @@ export default {
             },
         }
     },
-    computed: {},
+    computed: {
+        table() {
+            return this?.$refs?.dPage?.$refs?.dTable
+        },
+    },
     methods: {
         closed() {},
         edit(item) {
@@ -77,6 +85,11 @@ export default {
             this.$refs.addM.dialogOption.id = ''
             this.$refs.addM.dialogOption.formData = new Object()
             this.$refs.addM.dialogOption.visible = true
+        },
+        addIntegral(item) {
+            this.$refs.addIntegral.dialogOption.id = item.id
+            // this.$refs.addIntegral.dialogOption.formData = new Object()
+            this.$refs.addIntegral.dialogOption.visible = true
         },
         async delete(row) {
             let ids = []

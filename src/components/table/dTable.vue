@@ -235,10 +235,12 @@ export default {
     },
     methods: {
         resizeTable() {
-            let bodyWrapper = document.getElementsByClassName('el-table__body-wrapper')[0]
-            this.getParentTop(bodyWrapper, 0)
-            bodyWrapper.style.height =
-                document.documentElement.offsetHeight - this.bodyHeihgt - 120 + 'px'
+            setTimeout(() => {
+                let bodyWrapper = document.getElementsByClassName('el-table__body-wrapper')[0]
+                this.getParentTop(bodyWrapper, 0)
+                bodyWrapper.style.height =
+                    document.documentElement.offsetHeight - this.bodyHeihgt - 80 + 'px'
+            }, 0)
         },
         async getData() {
             this.loading = true

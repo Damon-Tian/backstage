@@ -69,3 +69,6 @@ export function deleteMember(params) {
 export function addMember(params) {
     return post('/member/save', params, { alert: true })
 }
+export function addMemberIntegral(params) {
+    return post('/member/add_integral', params, { alert: true })
+}

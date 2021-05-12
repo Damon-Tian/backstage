@@ -1,5 +1,4 @@
 import { defineConfig } from 'vite'
-import { viteMockServe } from 'vite-plugin-mock'
 import { vite2Ext } from 'apite'
 import vue from '@vitejs/plugin-vue'
 import path from 'path'
@@ -30,6 +29,7 @@ export default defineConfig({
             },
         },
     },
+    base: process.env.MODE == 'development' ? '' : '/admin/',
     server: {
         proxy: {
             '/api': {
@@ -39,8 +39,5 @@ export default defineConfig({
                 rewrite: (path) => path.replace(/^\/api/, 'xxx'),
             },
         },
-    },
-    build: {
-        base: '/admin/',
     },
 })

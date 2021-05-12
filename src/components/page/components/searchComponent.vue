@@ -27,6 +27,7 @@
                 <el-button size="small" type="primary" @click="getData">搜索</el-button>
             </slot>
         </div>
+        <div class="search-border-bottom"></div>
     </div>
 </template>
 
@@ -72,15 +73,24 @@ export default {
     padding-bottom: 10px;
     margin-bottom: 10px;
     position: relative;
-    &::after {
-        content: '';
+    .search-border-bottom {
         position: absolute;
         left: 0;
         right: 0;
         bottom: 0px;
-        height: 4px;
-        background-image: linear-gradient(rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.01));
+        height: 3px;
+        overflow: hidden;
+        &::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 4px;
+            height: 4px;
+            box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.42);
+        }
     }
+
     .page-search-left {
         width: calc(100% - @width);
     }
