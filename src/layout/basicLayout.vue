@@ -27,9 +27,10 @@ export default {
             return this.$store.state.bread.isCollapse
         },
     },
-    created() {
+    async created() {
         this.$store.dispatch('user/getStatusEnum')
         this.$store.dispatch('user/getMenuTypeEnum')
+        this.$store.dispatch('user/getProfile')
     },
 }
 </script>

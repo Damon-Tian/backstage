@@ -47,11 +47,12 @@ export default {
     li {
         list-style: none;
         display: inline-block;
-        padding: 5px 15px;
-        margin-right: 10px;
+        padding: 4px 10px;
         font-size: 12px;
-        border-radius: 2px;
-        box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.12);
+        margin-right: 10px;
+        transform: scale(1);
+        border-radius: 15px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
         cursor: pointer;
         border: 1px solid gainsboro;
         transition: all 0.4s ease;

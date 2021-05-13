@@ -1,48 +1,23 @@
 <template>
-    <d-dialog
-        :option="dialogOption"
-        v-model:visible="dialogOption.visible"
-        @beforeDataGeted="beforeDataGeted"
-        @closed="closedDialog"
-    >
-        <template #default>
-            <d-form ref="form" :option="formOption" @confirm="confirm"> </d-form>
-        </template>
-        <template #footer>
-            <span></span>
-        </template>
-    </d-dialog>
+    <el-card>
+        <d-form ref="form" :option="option" @confirm="save"></d-form>
+    </el-card>
 </template>
 
 <script>
-import dDialog from '@/components/dialog/dDialog.vue'
+import { updateProfile } from '@/api/user.js'
 import dForm from '@/components/form/dForm.vue'
-import { addMerchant, updateMerchant } from '@/api/user.js'
 export default {
-    components: { dForm, dDialog },
-    created() {
+    components: { dForm },
+    mounted() {
         this.getEnum()
-    },
-    watch: {
-        'dialogOption.visible'() {
-            let title = this.dialogOption.id
-                ? '修改' + this.dialogOption.halfTitle
-                : '新增' + this.dialogOption.halfTitle
-            this.dialogOption.title = title
-        },
+        this.getUser()
     },
     data() {
         return {
-            dialogOption: {
-                visible: false,
-                title: '',
-                halfTitle: '商家',
-                width: '550px',
-                id: '',
-                beforeDataUrl: '/merchant/info',
-            },
-            formOption: {
-                labelWidth: '150px',
+            option: {
+                labelWidth: '200px',
+                inputWidth: '80%',
                 formData: {},
                 forms: [
                     {
@@ -51,18 +26,11 @@ export default {
                         type: 'input',
                         rules: ['required'],
                     },
-                    {
-                        key: 'username',
-                        label: '用户名（登录账号）',
-                        type: 'input',
-                        rules: ['required'],
-                    },
-                    {
-                        key: 'password',
-                        label: '密码',
-                        type: 'input',
-                        rules: ['required'],
-                    },
+                    // {
+                    //     key: 'password',
+                    //     label: '密码',
+                    //     type: 'input',
+                    // },
                     {
                         key: 'address',
                         label: '商家地址',
@@ -149,33 +117,29 @@ export default {
         getEnum() {
             let arr = this.$store.state.user.statusEnums
             if (arr.length) {
-                this.formOption.forms.find((item) => item.key == 'status').options = arr
+                this.option.forms.find((item) => item.key === 'status').options = arr
             } else {
                 setTimeout(() => {
                     this.getEnum()
                 }, 200)
             }
         },
+        getUser() {
+            let user = this.$store.state.user.user
+            if (user) {
+                this.option.formData = { ...user }
+            } else {
+                setTimeout(() => {
+                    this.getUser()
+                }, 200)
+            }
+        },
         upload(file, key) {
             this.$refs.form.formData[key] = file.msg
         },
-        closedDialog() {
-            this.$refs.form.clearForm()
-        },
-        beforeDataGeted(formData) {
-            this.formOption.formData = formData
-        },
-        async confirm(formData) {
-            let res = ''
-            if (formData.id > 0) {
-                res = await updateMerchant(formData)
-            } else {
-                res = await addMerchant(formData)
-            }
-            if (res.suc) {
-                this.$emit('confirm')
-                this.dialogOption.visible = false
-            }
+        async save(formdata) {
+            let res = await updateProfile(formdata)
+            this.$store.dispatch('user/getProfile')
         },
     },
 }

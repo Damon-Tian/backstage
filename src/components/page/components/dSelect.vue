@@ -3,7 +3,7 @@
         <span>{{ label }}：</span>
         <!-- :style="{ width: labelWidth }" -->
         <!-- :style="{ width: `calc(100% - ${labelWidth})` }" -->
-        <el-select v-model="value" filterable :placeholder="placeholder">
+        <el-select v-model="value" filterable :placeholder="placeholder" size="small">
             <el-option
                 v-for="item in option"
                 :key="item.value"

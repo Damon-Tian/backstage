@@ -17,7 +17,7 @@
 <script>
 import dDialog from '@/components/dialog/dDialog.vue'
 import dForm from '@/components/form/dForm.vue'
-import { addMember, updateMember, menuUpdate, menuSave } from '@/api/user.js'
+import { menuUpdate, menuSave } from '@/api/user.js'
 export default {
     components: { dForm, dDialog },
     props: ['menuList'],
@@ -25,6 +25,12 @@ export default {
         this.getEnum()
     },
     watch: {
+        'dialogOption.visible'() {
+            let title = this.dialogOption.id
+                ? '修改' + this.dialogOption.halfTitle
+                : '新增' + this.dialogOption.halfTitle
+            this.dialogOption.title = title
+        },
         menuList() {
             if (!this.menuList.length) return []
             let arr = JSON.parse(JSON.stringify(this.menuList)),
@@ -45,7 +51,8 @@ export default {
         return {
             dialogOption: {
                 visible: false,
-                title: '添加用户',
+                title: '菜单',
+                halfTitle: '菜单',
                 width: '550px',
                 id: '',
                 beforeDataUrl: '/sys_menu/info',

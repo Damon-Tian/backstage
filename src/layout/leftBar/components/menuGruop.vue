@@ -11,8 +11,10 @@
         <!-- 无子级路由 -->
         <router-link :to="{ name: item.name }" v-else :key="item.name">
             <el-menu-item :index="item.name">
-                <i class="el-icon-menu"></i>
-                <template #title>{{ item.name }}</template>
+                <i :class="item.icon || 'el-icon-menu'"></i>
+                <template #title>
+                    <span style="font-size: 14px">{{ item.name }}</span>
+                </template>
             </el-menu-item>
         </router-link>
     </template>

@@ -5,7 +5,7 @@
                 v-if="button.type != 'danger'"
                 @click="button.fn"
                 :type="button.type"
-                :size="button.size || 'small'"
+                :size="button.size || 'mini'"
                 :plain="button.plain"
                 :circle="button.circle"
                 :disabled="button.disabled"
@@ -24,7 +24,7 @@
                 <template #reference>
                     <el-button
                         :type="button.type"
-                        :size="button.size || 'small'"
+                        :size="button.size || 'mini'"
                         :plain="button.plain"
                         :circle="button.circle"
                         :disabled="button.disabled"
@@ -34,6 +34,15 @@
                 </template>
             </el-popconfirm>
         </template>
+        <el-tooltip class="item" effect="dark" content="刷新" placement="top">
+            <el-button
+                style="float: right; margin-right: 30px"
+                icon="el-icon-refresh"
+                circle
+                size="mini"
+                @click="getData"
+            ></el-button>
+        </el-tooltip>
     </div>
     <el-table
         v-loading="loading"
@@ -47,6 +56,7 @@
         @select="rowSelect"
         @select-all="selectAll"
         :tree-props="tableOption.rowChildren"
+        :header-cell-style="tableOption.headerCellStyle"
     >
         >
         <el-table-column type="selection" width="55" v-if="tableOption.table.select">
@@ -87,7 +97,7 @@
                         v-if="button.type != 'danger'"
                         @click="button.fn(scope.row)"
                         :type="button.type"
-                        :size="button.size || 'small'"
+                        :size="button.size || 'mini'"
                         :plain="button.plain == false ? false : true"
                         :circle="button.circle"
                         :disabled="button.disabled"
@@ -106,7 +116,7 @@
                         <template #reference>
                             <el-button
                                 :type="button.type"
-                                :size="button.size || 'small'"
+                                :size="button.size || 'mini'"
                                 :plain="button.plain == false ? false : true"
                                 :circle="button.circle"
                                 :disabled="button.disabled"
@@ -127,7 +137,7 @@
             :page-size="tableOption.pagination.pageSize"
             :page-sizes="tableOption.pagination.pageSizes"
             :total="tableOption.pagination.total"
-            :current-page="tableOption.pagination.page"
+            :current-page="tableOption.pagination.pageNum"
             :pager-count="tableOption.pagination.pagerCount"
             :small="tableOption.pagination.small"
             @size-change="sizeChange"
@@ -185,7 +195,7 @@ export default {
                 label: 'label',
             },
             defaultTableOption: {
-                stripe: true,
+                stripe: false,
                 autoTableHeight: true,
                 columns: [
                     // { key: 'date', label: '日期' },
@@ -211,10 +221,10 @@ export default {
                 ],
                 pagination: {
                     pageSize: 10,
-                    pageSizes: [1, 2, 5, 40, 50],
+                    pageSizes: [1, 2, 10, 20, 50],
                     total: 0,
                     pageNum: 1,
-                    layout: 'prev, pager, next,sizes',
+                    layout: 'total,sizes,prev, pager, next,jumper',
                     background: true,
                     small: true,
                     pagerCount: 5,
@@ -222,6 +232,12 @@ export default {
                 rowChildren: {
                     children: 'subList',
                     hasChildren: true,
+                },
+                headerCellStyle: {
+                    backgroundColor: 'rgba(0,0,0,.03)',
+                    color: '#303133',
+                    fontSize: '14px',
+                    fontWeight: 'normal',
                 },
             },
             tableOption: {},
@@ -247,6 +263,7 @@ export default {
             let { pageNum, pageSize } = this.tableOption.pagination
             let { order, prop } = this.tableOption.sort
             let params = {
+                isPage: 1,
                 pageNum,
                 pageSize,
                 // order,
@@ -284,8 +301,8 @@ export default {
             this.getData()
         },
         sizeChange(val) {
-            this.tableOption.pagination.pageSize = val
             this.tableOption.pagination.pageNum = 1
+            this.tableOption.pagination.pageSize = val
             this.getData()
         },
         currentChange(val) {
@@ -327,5 +344,8 @@ export default {
 }
 :deep(.el-table__body-wrapper) {
     overflow-y: auto;
+}
+.table-operation-head {
+    margin-bottom: 10px;
 }
 </style>

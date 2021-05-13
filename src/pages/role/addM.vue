@@ -17,7 +17,7 @@
 <script>
 import dDialog from '@/components/dialog/dDialog.vue'
 import dForm from '@/components/form/dForm.vue'
-import { addMember, updateMember } from '@/api/user.js'
+import { addRole, updateRole } from '@/api/user.js'
 export default {
     components: { dForm, dDialog },
     created() {
@@ -26,8 +26,8 @@ export default {
     watch: {
         'dialogOption.visible'() {
             let title = this.dialogOption.id
-                ? '修改' + this.dialogOption.title
-                : '新增' + this.dialogOption.title
+                ? '修改' + this.dialogOption.halfTitle
+                : '新增' + this.dialogOption.halfTitle
             this.dialogOption.title = title
         },
     },
@@ -35,26 +35,30 @@ export default {
         return {
             dialogOption: {
                 visible: false,
-                title: '用户',
+                title: '',
+                halfTitle: '角色',
                 width: '550px',
                 id: '',
-                beforeDataUrl: '/member/info',
+                beforeDataUrl: '/sys_role/info',
             },
             formOption: {
                 labelWidth: '150px',
                 formData: {},
                 forms: [
                     {
-                        key: 'phone',
-                        label: '电话号码',
+                        key: 'menuIds',
+                        label: '菜单列表',
                         type: 'input',
-                        rules: ['required'],
                     },
                     {
-                        key: 'merchantNo',
-                        label: '商户名称',
+                        key: 'roleKey',
+                        label: '角色key',
                         type: 'input',
-                        rules: ['required'],
+                    },
+                    {
+                        key: 'roleName',
+                        label: '角色名称',
+                        type: 'input',
                     },
                 ],
             },
@@ -71,6 +75,9 @@ export default {
                 }, 200)
             }
         },
+        upload(file, key) {
+            this.$refs.form.formData[key] = file.msg
+        },
         closedDialog() {
             this.$refs.form.clearForm()
         },
@@ -79,10 +86,10 @@ export default {
         },
         async confirm(formData) {
             let res = ''
-            if (formData.id > -1) {
-                res = await updateMember(formData)
+            if (formData.id > 0) {
+                res = await updateRole(formData)
             } else {
-                res = await addMember(formData)
+                res = await addRole(formData)
             }
             if (res.suc) {
                 this.$emit('confirm')

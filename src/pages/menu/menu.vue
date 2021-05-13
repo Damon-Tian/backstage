@@ -56,7 +56,7 @@ export default {
                     ],
                     operationColumn: {
                         operationArray: [
-                            { label: '修改', fn: this.edit, type: 'primary' },
+                            { label: '修改', fn: this.edit },
                             { label: '删除', fn: this.delete, type: 'danger' },
                         ],
                     },

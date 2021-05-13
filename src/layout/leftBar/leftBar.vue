@@ -3,7 +3,7 @@
         :default-active="defaultActive"
         :uniqueOpened="false"
         class="d-leftBar"
-        background-color="#545c64"
+        background-color="#1e282c"
         text-color="#fff"
         :collapse="isCollapse"
     >

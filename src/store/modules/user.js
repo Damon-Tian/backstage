@@ -1,4 +1,4 @@
-import { login, getStatusEnum, getMenuTypeEnum } from '@/api/user.js'
+import { login, logout, getStatusEnum, getMenuTypeEnum, getProfile, getMenu } from '@/api/user.js'
 export default {
     namespaced: true,
     state: {
@@ -11,6 +11,8 @@ export default {
     mutations: {
         setUser(state, data) {
             state.user = data
+        },
+        setToken(state, data) {
             state.token = data.tokenInfo.token
             localStorage.setItem('token', state.token)
         },
@@ -32,9 +34,12 @@ export default {
         async login({ commit }, data) {
             let res = await login(data)
             if (res.suc) {
-                commit('setUser', res.data)
+                commit('setToken', res.data)
                 return true
             }
+        },
+        async logout() {
+            logout()
         },
         async getStatusEnum({ commit, state }) {
             let res = await getStatusEnum()
@@ -49,6 +54,11 @@ export default {
                 // state.enums = res.data
                 commit('setEnum', { enums: res.data, type: 'menuTypeEnums' })
             }
+        },
+        async getProfile({ commit, state }) {
+            let res = await Promise.all([getProfile(), getMenu()])
+            commit('setUser', res[0].data)
+            // commit('setMenu', res[1].data)
         },
     },
 }

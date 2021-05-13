@@ -23,6 +23,10 @@ router.beforeEach(async (to, from, next) => {
             router.push('/')
             next()
         }
+        if (to.matched.length === 0) {
+            router.push('/404')
+            next()
+        }
         if (!store.state.routes.routes.length) {
             await store.dispatch('routes/setRoutes')
             router.replace(to.path)

@@ -29,8 +29,9 @@ export default defineConfig({
             },
         },
     },
-    base: process.env.MODE == 'development' ? '' : '/admin/',
+    // base: process.env.MODE === 'development' ? '' : '/admin/',
     server: {
+        port: 1212,
         proxy: {
             '/api': {
                 target: 'https://adminapi.wmelon.cn/sha',

@@ -184,7 +184,7 @@ export default {
         this.setFormData()
     },
     watch: {
-        'option.formData': {
+        option: {
             handler(val, oldVal, x, y) {
                 this.formOption = defaultsDeep({}, this.option, this.defaultFormOption)
                 this.pushRules()

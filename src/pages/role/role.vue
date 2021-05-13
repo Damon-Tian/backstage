@@ -1,27 +1,8 @@
-// 用户相关
 <template>
     <div>
         <d-page ref="dPage" :option="option">
             <template #tableColumns="data">
                 <span v-if="data.column.key == 'headImg' || data.column.key == 'homeCarouselJson'">
-                    <img
-                        v-if="data.row[data.column.key]"
-                        style="width: 250px; height: 150px; object-fit: cover"
-                        :src="data.row[data.column.key]"
-                        alt="暂无图片"
-                    />
-                    <!-- style="
-                            width: 250px;
-                            height: 80px;
-                            display: flex;
-                            flex-direction: column;
-                            justify-content: center;
-                            align-items: center;
-                        " -->
-                    <div v-else>
-                        <!-- <i class="el-icon-cloudy" style="font-size: 2rem"></i> -->
-                        <span>暂无图片</span>
-                    </div>
                 </span>
                 <span v-else>
                     {{ data.row[data.column.key] }}
@@ -29,29 +10,28 @@
             </template>
         </d-page>
         <add @confirm="confirm" ref="addM" @closed="closed"></add>
-        <add-integral @confirm="confirm" ref="addIntegral"></add-integral>
     </div>
 </template>
 
 <script>
 import dPage from '@/components/page/dPage.vue'
-import { deleteMember, getMemberList } from '@/api/user.js'
 import add from './addM.vue'
-import addIntegral from './addIntegral.vue'
+import { deleteMerchant } from '@/api/user.js'
 export default {
-    components: { dPage, add, addIntegral },
+    components: { dPage, add },
     data() {
         return {
             option: {
+                searchOption: {
+                    searchArray: [],
+                },
                 tableOption: {
-                    width: [{ headImg: '300px' }, { homeCarouselJson: '300px' }],
-                    url: '/member/page_list',
+                    url: '/sys_role/page_list',
                     columns: [
-                        { key: 'phone', label: '手机号码' },
-                        { key: 'headImg', label: '头像' },
-                        { key: 'memberNo', label: '用户编号' },
-                        { key: 'merchantNo', label: '商家编号' },
-                        { key: 'integral', label: '积分' },
+                        { key: 'id', label: 'id' },
+                        { key: 'menuIds', label: '菜单列表' },
+                        { key: 'roleKey', label: '角色key' },
+                        { key: 'roleName', label: '角色名称' },
                     ],
                     operationHead: [
                         { label: '新增', fn: this.addM, type: 'primary' },
@@ -59,7 +39,6 @@ export default {
                     ],
                     operationColumn: {
                         operationArray: [
-                            { label: '加积分', fn: this.addIntegral },
                             { label: '修改', fn: this.edit },
                             { label: '删除', fn: this.delete, type: 'danger' },
                         ],
@@ -69,8 +48,11 @@ export default {
         }
     },
     computed: {
+        routes() {
+            return this.$store.state.routes.routes
+        },
         table() {
-            return this?.$refs?.dPage?.$refs?.dTable
+            return this.$refs.dPage.$refs.dTable
         },
     },
     methods: {
@@ -83,11 +65,6 @@ export default {
             this.$refs.addM.dialogOption.id = ''
             this.$refs.addM.dialogOption.formData = new Object()
             this.$refs.addM.dialogOption.visible = true
-        },
-        addIntegral(item) {
-            this.$refs.addIntegral.dialogOption.id = item.id
-            // this.$refs.addIntegral.dialogOption.formData = new Object()
-            this.$refs.addIntegral.dialogOption.visible = true
         },
         async delete(row) {
             let ids = []
@@ -105,7 +82,7 @@ export default {
                 })
             }
             //批量删除
-            let res = await deleteMember(ids)
+            let res = await deleteMerchant(ids)
             if (res.suc) {
                 this.$refs.dPage.getData()
             }

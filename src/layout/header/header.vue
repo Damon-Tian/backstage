@@ -17,13 +17,18 @@
             <div class="d-header-profile">
                 <span>{{ name }}</span>
                 <div>
-                    <el-dropdown class="d-profile">
+                    <el-dropdown @command="goProfile" trigger="click" class="d-profile">
                         <div>
-                            <el-image></el-image><i class="el-icon-arrow-down el-icon--right"></i>
+                            <img class="d-img" v-if="headImg" :src="headImg" />
+                            <span class="d-img"></span>
+                            <i class="el-icon-arrow-down el-icon--right"></i>
                         </div>
                         <template #dropdown>
                             <el-dropdown-menu>
-                                <el-dropdown-item>黄金糕</el-dropdown-item>
+                                <el-dropdown-item command="goProfile">个人中心</el-dropdown-item>
+                                <el-dropdown-item command="logout" divided
+                                    >退出登录</el-dropdown-item
+                                >
                             </el-dropdown-menu>
                         </template>
                     </el-dropdown>
@@ -50,12 +55,26 @@ export default {
     },
     computed: {
         ...mapState('bread', ['isCollapse']),
+        headImg() {
+            if (this.$store.state.user.user) {
+                return this.$store.state.user.user.headImg
+            }
+            return false
+        },
     },
     created() {
         this.name = this.$store.state.user.name
     },
     methods: {
         ...mapMutations('bread', ['setCollapse']),
+        goProfile(type) {
+            if (type === 'goProfile') {
+                this.$router.push('/profile')
+            } else if (type == 'logout') {
+                this.$store.dispatch('user/logout')
+                this.$router.push('/login')
+            }
+        },
     },
     watch: {
         // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
@@ -96,6 +115,12 @@ export default {
                 margin-left: 10px;
                 .d-profile {
                     display: flex;
+                    .d-img {
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 50%;
+                        object-fit: cover;
+                    }
                 }
             }
         }

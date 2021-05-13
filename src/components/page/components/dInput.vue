@@ -3,8 +3,7 @@
         <span>{{ label }}：</span>
         <!-- :style="{ width: labelWidth }" -->
         <!-- :style="{ width: `calc(100% - ${labelWidth})` }" -->
-
-        <el-input v-model="value" :placeholder="placeholder"></el-input>
+        <el-input v-model="value" :placeholder="placeholder" size="small"></el-input>
     </label>
 </template>
 
@@ -25,6 +24,7 @@ export default {
     justify-content: center;
     align-items: center;
     padding-bottom: 10px;
+    font-size: 14px;
     // width: 300px;
     span {
         white-space: nowrap;

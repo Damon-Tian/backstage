@@ -23,8 +23,8 @@
         </div>
         <div class="page-search-right">
             <slot name="search-confirm">
-                <el-button size="small" @click="clearSearch">清空</el-button>
-                <el-button size="small" type="primary" @click="getData">搜索</el-button>
+                <el-button size="mini" @click="clearSearch">清空</el-button>
+                <el-button size="mini" type="primary" @click="getData">搜索</el-button>
             </slot>
         </div>
         <div class="search-border-bottom"></div>
@@ -78,7 +78,7 @@ export default {
         left: 0;
         right: 0;
         bottom: 0px;
-        height: 3px;
+        height: 6px;
         overflow: hidden;
         &::after {
             content: '';
@@ -87,7 +87,7 @@ export default {
             right: 0;
             bottom: 4px;
             height: 4px;
-            box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.42);
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.32);
         }
     }
 

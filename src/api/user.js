@@ -1,5 +1,6 @@
 import { post, get } from '@/axios/index.js'
 import { routes } from '@/router/index.js'
+import router from '@/router/index.js'
 export function login({ username, password }) {
     return post('/anon/admin_login', { username, password }, { alert: true })
 }
@@ -71,4 +72,32 @@ export function addMember(params) {
 }
 export function addMemberIntegral(params) {
     return post('/member/add_integral', params, { alert: true })
+}
+
+//角色相关
+export function getRoleList() {
+    return get('/sys_role/page_list')
+}
+export function updateRole(params) {
+    return post('/sys_role/update', params, { alert: true })
+}
+export function deleteRole(params) {
+    return post('/sys_role/deleteBatch', params, { alert: true })
+}
+export function addRole(params) {
+    return post('/sys_role/save', params, { alert: true })
+}
+
+//个人中心
+export function getProfile() {
+    return get('/merchant/now/info')
+}
+export function updateProfile(params) {
+    return post('/merchant/now/update_info', params, { alert: true })
+}
+export function logout() {
+    return post('/merchant/now/logout')
+}
+export function getMenu() {
+    return post('/merchant/now/menu_tree')
 }

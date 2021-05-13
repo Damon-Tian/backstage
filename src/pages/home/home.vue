@@ -77,12 +77,12 @@ export default {
                         { key: 'headImg', label: '头像' },
                         { key: 'email', label: '邮箱' },
                         { key: 'homeCarouselJson', label: '商家首页轮播图' },
-                        { key: 'isConsumables', label: '是否耗材预警' },
-                        { key: 'isFaultNotice', label: '是否故障报警' },
+                        // { key: 'isConsumables', label: '是否耗材预警' },
+                        // { key: 'isFaultNotice', label: '是否故障报警' },
                         { key: 'merchantName', label: '商家名称' },
                         { key: 'merchantNo', label: '商家编号' },
-                        { key: 'merchantPerson', label: '商户联系人' },
-                        { key: 'merchantPhone', label: '商户联系人电话' },
+                        // { key: 'merchantPerson', label: '商户联系人' },
+                        // { key: 'merchantPhone', label: '商户联系人电话' },
                     ],
                     operationHead: [
                         { label: '新增', fn: this.addM, type: 'primary' },
@@ -90,7 +90,7 @@ export default {
                     ],
                     operationColumn: {
                         operationArray: [
-                            { label: '修改', fn: this.edit, type: 'primary' },
+                            { label: '修改', fn: this.edit },
                             { label: '删除', fn: this.delete, type: 'danger' },
                         ],
                     },

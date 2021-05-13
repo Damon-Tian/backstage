@@ -12,6 +12,8 @@ const Six = () => import('@/pages/one/sxx.vue')
 const Login = () => import('@/pages/login.vue')
 const AddM = () => import('@/pages/home/addM.vue')
 const Menu = () => import('@/pages/menu/menu.vue')
+const Role = () => import('@/pages/role/role.vue')
+const Profile = () => import('@/pages/profile/profile.vue')
 const frontRoutes = [
     { name: 'BasicLayout', component: () => import('@/layout/basicLayout.vue') },
     { name: 'home', component: () => import('@/pages/home/home.vue') },
@@ -37,18 +39,33 @@ export const routes = [
         children: [
             {
                 path: '',
+                icon: 'el-icon-s-home',
                 name: '首页',
                 component: Home,
                 // children: [{ path: '/add', component: AddM, name: 'Addm', hide: true }],
             },
             {
                 path: '/menu',
+                icon: 'el-icon-menu',
                 name: '菜单列表',
                 component: Menu,
             },
             {
-                path: '/one',
-                name: '组件相关',
+                path: '/role',
+                icon: 'el-icon-user-solid',
+                name: '角色相关',
+                component: Role,
+            },
+            {
+                path: '/profile',
+                icon: 'el-icon-setting',
+                name: '个人中心',
+                component: Profile,
+            },
+            {
+                path: '/user',
+                icon: 'el-icon-user',
+                name: '用户相关',
                 component: One,
                 // redirect: '/one/two',
                 // children: [

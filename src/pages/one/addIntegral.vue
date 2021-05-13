@@ -27,7 +27,7 @@ export default {
         return {
             dialogOption: {
                 visible: false,
-                title: '添加用户',
+                title: '添加积分',
                 width: '550px',
                 id: '',
                 beforeGetData: false,

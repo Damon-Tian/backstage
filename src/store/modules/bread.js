@@ -19,13 +19,14 @@ export default {
             let index = hasBread(state.breads, key)
             if (index > -1) {
                 state.breads.splice(index, 1)
-                let name = state.breads[index]
-                    ? state.breads[index].name
-                    : state.breads[state.breads.length - 1].name
-                let lastIndex = location.pathname.lastIndexOf('/')
-                if (key === location.pathname.slice(lastIndex + 1)) {
-                    router.replace({ name })
-                }
+                let route = state.breads[index]
+                    ? state.breads[index]
+                    : state.breads[state.breads.length - 1]
+                router.push(route.path)
+                // let lastIndex = location.pathname.lastIndexOf('/')
+                // if (key === location.pathname.slice(lastIndex + 1)) {
+                //     router.replace({ name })
+                // }
             }
         },
         addBread(state, value) {
