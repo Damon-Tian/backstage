@@ -2,7 +2,7 @@ import { post, get } from '@/axios/index.js'
 import { routes } from '@/router/index.js'
 import router from '@/router/index.js'
 export function login({ username, password }) {
-    return post('/anon/admin_login', { username, password }, { alert: true })
+    return post('/anon/admin_login', { username, password })
 }
 
 export function asyncRoutes(id) {

@@ -21,11 +21,8 @@ router.beforeEach(async (to, from, next) => {
     } else {
         if (to.path.includes('login')) {
             router.push('/')
-            next()
-        }
-        if (to.matched.length === 0) {
+        } else if (to.matched.length === 0) {
             router.push('/404')
-            next()
         }
         if (!store.state.routes.routes.length) {
             await store.dispatch('routes/setRoutes')

@@ -4,14 +4,16 @@
         <l-input
             :option="{ label: '账号', icon: 'el-icon-user' }"
             v-model:value="username"
+            @keydown.enter="login"
         ></l-input>
         <l-input
             :option="{ label: '密码', type: 'password', icon: 'el-icon-key' }"
             v-model:value="password"
+            @keydown.enter="login"
         ></l-input>
         <div class="code">
             <l-input :option="{ label: '验证码' }" v-model:value="code"></l-input>
-            <span class="code-img"> 2 3 4 1</span>
+            <span class="code-img"> 1 2 1 2</span>
         </div>
         <el-button type="primary" @click="login" round class="login-button">登录</el-button>
         <div class="back"></div>
@@ -67,7 +69,7 @@ export default {
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.92);
+    box-shadow: 0 2px 35px 10px rgb(0 0 0 / 92%);
     .back {
         width: 100%;
         height: 100%;

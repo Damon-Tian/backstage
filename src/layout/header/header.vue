@@ -72,7 +72,6 @@ export default {
                 this.$router.push('/profile')
             } else if (type == 'logout') {
                 this.$store.dispatch('user/logout')
-                this.$router.push('/login')
             }
         },
     },
@@ -102,6 +101,7 @@ export default {
         .toggle-leftBar {
             i {
                 cursor: pointer;
+                font-size: 18px;
             }
             & > * {
                 display: inline-block;
@@ -115,6 +115,9 @@ export default {
                 margin-left: 10px;
                 .d-profile {
                     display: flex;
+                    & > div {
+                        cursor: pointer;
+                    }
                     .d-img {
                         width: 40px;
                         height: 40px;

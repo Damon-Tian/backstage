@@ -36,6 +36,7 @@ export default {
         // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
         $route: {
             handler(newValue, oldName) {
+                if (newValue.path.includes('login')) return
                 const matched = Array.from(newValue.matched)
                 if (!matched.length) {
                     this.$router.push('/404')
@@ -61,7 +62,7 @@ export default {
     overflow-y: auto;
     &.el-menu {
         border: none;
-        box-shadow: 2px 0px @shadowWidth 0px rgba(0, 0, 0, 0.22);
+        box-shadow: 2px 0px 4px 1px rgba(0, 0, 0, 0.42);
         width: calc(100% - @shadowWidth);
         transition: none;
     }

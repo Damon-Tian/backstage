@@ -1,4 +1,5 @@
 import { login, logout, getStatusEnum, getMenuTypeEnum, getProfile, getMenu } from '@/api/user.js'
+import router from '@/router/index.js'
 export default {
     namespaced: true,
     state: {
@@ -38,8 +39,10 @@ export default {
                 return true
             }
         },
-        async logout() {
-            logout()
+        async logout({ commit }) {
+            await logout()
+            commit('clearToken')
+            router.push('/login')
         },
         async getStatusEnum({ commit, state }) {
             let res = await getStatusEnum()

@@ -140,7 +140,7 @@ export const resetRoutes = (routes, first) => {
     return resultRoutes
 }
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHistory('/admin/'),
     routes: constantRoutes,
 })
 
