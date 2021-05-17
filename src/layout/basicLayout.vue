@@ -8,7 +8,14 @@
                 <headers></headers>
             </el-header>
             <el-main style="height: calc(100vh - 75px)">
-                <router-view></router-view>
+                <router-view v-slot="{ Component }">
+                    <transition name="page" mode="out-in">
+                        <component :is="Component" />
+                    </transition>
+                </router-view>
+                <!-- <transition name="page">
+                    <router-view></router-view>
+                </transition> -->
             </el-main>
         </el-container>
     </el-container>
@@ -35,6 +42,18 @@ export default {
 }
 </script>
 <style lang="less">
+.page-enter-active,
+.page-leave-active {
+    transition: all 0.45s;
+}
+.page-enter-from {
+    transform: translateX(-50px);
+    opacity: 0;
+}
+.page-leave-to {
+    transform: translateX(50px);
+    opacity: 0;
+}
 .asideBar {
     transition: all 0.3s;
 }

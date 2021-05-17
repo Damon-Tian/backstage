@@ -17,7 +17,12 @@
             <div class="d-header-profile">
                 <span>{{ name }}</span>
                 <div>
-                    <el-dropdown @command="goProfile" trigger="click" class="d-profile">
+                    <el-dropdown
+                        size="medium"
+                        @command="goProfile"
+                        trigger="click"
+                        class="d-profile"
+                    >
                         <div>
                             <img class="d-img" v-if="headImg" :src="headImg" />
                             <span class="d-img"></span>
