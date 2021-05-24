@@ -46,6 +46,7 @@
     </div>
     <el-table
         v-loading="loading"
+        element-loading-background="transparent"
         ref="dTable"
         row-key="id"
         :data="tableData"

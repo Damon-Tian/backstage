@@ -13,9 +13,6 @@
                         <component :is="Component" />
                     </transition>
                 </router-view>
-                <!-- <transition name="page">
-                    <router-view></router-view>
-                </transition> -->
             </el-main>
         </el-container>
     </el-container>
@@ -44,7 +41,8 @@ export default {
 <style lang="less">
 .page-enter-active,
 .page-leave-active {
-    transition: all 0.45s;
+    transition: all 0.5s;
+    transform: translateZ(0);
 }
 .page-enter-from {
     transform: translateX(-50px);

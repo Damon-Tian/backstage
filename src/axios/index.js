@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { ElMessage as Message } from 'element-plus'
+import router from '@/router/index.js'
 import store from '@/store/index.js'
 const instance = axios.create({
     // baseURL: '/api',
@@ -34,7 +35,7 @@ instance.interceptors.response.use(
         } else {
             if (res.data.code == 401) {
                 store.commit('user/clearToken')
-                window.location.href = location.origin + '/login'
+                router.push('/login')
             }
             Message({ message: res.data.msg, type: 'error' })
             return Promise.reject(res.data.msg)
