@@ -2,9 +2,12 @@ import axios from 'axios'
 import { ElMessage as Message } from 'element-plus'
 import router from '@/router/index.js'
 import store from '@/store/index.js'
+
+export const baseURL = 'https://adminapi.wmelon.cn/sha'
+export const uploadURL = 'https://api.wmelon.cn/api/upload'
 const instance = axios.create({
     // baseURL: '/api',
-    baseURL: 'https://adminapi.wmelon.cn/sha',
+    baseURL: baseURL,
     // timeout: 5000,
 })
 const getToken = () => {

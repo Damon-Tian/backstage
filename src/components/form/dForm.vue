@@ -99,11 +99,14 @@
             >
             </el-date-picker>
             <!-- 上传文件 -->
+            <!-- + '/upload/upload_file' -->
+            <!-- :headers="{ Authorization: $store.state.user.token }" -->
             <el-upload
                 v-else-if="formItem.type == 'upload'"
                 class="upload-demo"
-                :action="baseUrl + '/upload/upload_file'"
-                :headers="{ Authorization: $store.state.user.token }"
+                :ref="formItem.key"
+                :action="baseUrl"
+                :file-list="formItem.fileList"
                 :on-remove="
                     () => {
                         formData[formItem.key] = ''
@@ -152,19 +155,20 @@
             }}</span>
         </el-form-item>
         <el-form-item :style="{ textAlign: formOption.buttonAlign }">
-            <el-button type="primary" @click="onSubmit">确定</el-button>
-            <el-button type="danger" @click="clearForm">重置</el-button>
+            <el-button size="small" type="primary" @click="onSubmit">确定</el-button>
+            <el-button size="small" type="danger" @click="clearForm">重置</el-button>
         </el-form-item>
     </el-form>
 </template>
 
 <script>
 import { defaultsDeep } from 'lodash'
+import { uploadURL } from '@/axios/index.js'
 export default {
     props: ['option'],
     data() {
         return {
-            baseUrl: 'https://adminapi.wmelon.cn/sha',
+            baseUrl: uploadURL,
             formOption: {}, //最终的option
             defaultFormOption: {
                 inline: false,

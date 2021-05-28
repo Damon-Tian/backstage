@@ -29,7 +29,6 @@ export default {
                     url: '/sys_role/page_list',
                     columns: [
                         { key: 'id', label: 'id' },
-                        { key: 'menuIds', label: '菜单列表' },
                         { key: 'roleKey', label: '角色key' },
                         { key: 'roleName', label: '角色名称' },
                     ],

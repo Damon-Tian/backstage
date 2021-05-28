@@ -51,9 +51,12 @@ export default {
     },
     methods: {
         clearSearch() {
-            for (let i in this.searchValue) {
-                this.option.searchValue[i] = ''
-            }
+            // for (let i in this.searchValue) {
+            //     this.option.searchValue[i] = ''
+            // }
+            this.option.searchArray.forEach((item) => {
+                this.option.searchValue[item.key] = item.defaultValue || ''
+            })
         },
         getData() {
             this.$emit('getData')

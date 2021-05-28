@@ -68,6 +68,7 @@
             :prop="item[dataEnums.prop]"
             :label="item[dataEnums.label]"
             :width="checkAttribute(item, 'width')"
+            :min-width="checkAttribute(item, 'minWidth')"
             :sortable="checkAttribute(item, 'sortable')"
             :show-overflow-tooltip="true"
         >
@@ -256,7 +257,7 @@ export default {
                 let bodyWrapper = document.getElementsByClassName('el-table__body-wrapper')[0]
                 this.getParentTop(bodyWrapper, 0)
                 bodyWrapper.style.height =
-                    document.documentElement.offsetHeight - this.bodyHeihgt - 80 + 'px'
+                    document.documentElement.offsetHeight - this.bodyHeihgt - 50 + 'px'
             }, 0)
         },
         async getData() {
@@ -269,7 +270,7 @@ export default {
                 pageSize,
                 // order,
                 // prop,
-                // key: true,
+                // key: false,
                 ...this.searchValue,
             }
             let res = await getForm(this.tableOption.url, params)
@@ -341,7 +342,7 @@ export default {
 }
 .table-pagination {
     text-align: right;
-    padding: 20px 0 0 0;
+    padding: 10px 0 0 0;
 }
 :deep(.el-table__body-wrapper) {
     overflow-y: auto;

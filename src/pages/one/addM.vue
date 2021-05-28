@@ -26,8 +26,8 @@ export default {
     watch: {
         'dialogOption.visible'() {
             let title = this.dialogOption.id
-                ? '修改' + this.dialogOption.title
-                : '新增' + this.dialogOption.title
+                ? '修改' + this.dialogOption.halfTitle
+                : '新增' + this.dialogOption.halfTitle
             this.dialogOption.title = title
         },
     },
@@ -37,6 +37,7 @@ export default {
                 visible: false,
                 title: '用户',
                 width: '550px',
+                halfTitle: '用户',
                 id: '',
                 beforeDataUrl: '/member/info',
             },

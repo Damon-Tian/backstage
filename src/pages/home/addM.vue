@@ -109,6 +109,7 @@ export default {
                         onSuccess: (fileData) => {
                             this.upload(fileData, 'headImg')
                         },
+                        fileList: [{ name: '112', url: '1111111' }],
                     },
                     {
                         key: 'isConsumables',
@@ -160,7 +161,11 @@ export default {
             this.$refs.form.formData[key] = file.msg
         },
         closedDialog() {
-            this.$refs.form.clearForm()
+            let form = this.$refs.form
+            form.clearForm()
+            this.formOption.forms.forEach((val) => {
+                form.$refs[val.key] && form.$refs[val.key]?.clearFiles()
+            })
         },
         beforeDataGeted(formData) {
             this.formOption.formData = formData

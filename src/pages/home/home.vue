@@ -51,35 +51,42 @@ export default {
             option: {
                 searchOption: {
                     searchArray: [
-                        // {
-                        //     key: 'email',
-                        //     type: 'input',
-                        //     label: '邮箱',
-                        // },
                         {
                             key: 'isConsumables',
                             type: 'select',
                             label: '是否耗材预警',
-                            defaultValue: 'Y',
+                            defaultValue: '',
                             option: [
                                 { value: 'Y', label: '是' },
                                 { value: 'N', label: '否' },
+                                { value: '', label: '全部' },
                             ],
+                        },
+                        {
+                            key: 'key',
+                            type: 'input',
+                            label: '搜索',
+                            defaultValue: '',
+                            placeholder: '商户名称/商户联系人',
                         },
                     ],
                 },
                 tableOption: {
-                    width: [{ headImg: '300px' }, { homeCarouselJson: '300px' }],
+                    minWidth: [
+                        { headImg: '300px' },
+                        { homeCarouselJson: '300px' },
+                        { isConsumables: '160px' },
+                    ],
                     url: '/merchant/page_list',
                     columns: [
-                        { key: 'id', label: 'id' },
-                        { key: 'logo', label: '商家logo' },
+                        { key: 'merchantName', label: '商家名称' },
+                        // { key: 'id', label: 'id' },
+                        // { key: 'logo', label: '商家logo' },
                         { key: 'headImg', label: '头像' },
                         { key: 'email', label: '邮箱' },
                         { key: 'homeCarouselJson', label: '商家首页轮播图' },
-                        // { key: 'isConsumables', label: '是否耗材预警' },
+                        { key: 'isConsumables', label: '是否耗材预警' },
                         // { key: 'isFaultNotice', label: '是否故障报警' },
-                        { key: 'merchantName', label: '商家名称' },
                         { key: 'merchantNo', label: '商家编号' },
                         // { key: 'merchantPerson', label: '商户联系人' },
                         // { key: 'merchantPhone', label: '商户联系人电话' },
