@@ -4,6 +4,9 @@ import vue from '@vitejs/plugin-vue'
 import path from 'path'
 // https://vitejs.dev/config/
 export default defineConfig({
+    proxy: {
+        '/api': 'https://adminapi.wmelon.cn/sha',
+    },
     plugins: [
         vue(),
         vite2Ext({
@@ -32,14 +35,6 @@ export default defineConfig({
     // base: process.env.MODE === 'development' ? '' : '/admin/',
     server: {
         port: 1212,
-        proxy: {
-            '/api': {
-                target: 'https://adminapi.wmelon.cn/sha',
-                prependPath: false,
-                changeOrigin: true,
-                rewrite: (path) => path.replace(/^\/api/, 'xxx'),
-            },
-        },
     },
     build: {
         rollupOptions: {

@@ -138,7 +138,17 @@ export default {
             this.$refs.form.formData[key] = file.msg
         },
         async save(formdata) {
-            let res = await updateProfile(formdata)
+            let result = JSON.parse(JSON.stringify(formdata))
+            for (let i in result) {
+                if (result[i] instanceof Array) {
+                    if (result[i][0] && result[i][0].url) {
+                        result[i] = result[i].map((item) => item.url).join(';')
+                    } else {
+                        result[i] = ''
+                    }
+                }
+            }
+            let res = await updateProfile(result)
             this.$store.dispatch('user/getProfile')
         },
     },

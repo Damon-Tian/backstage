@@ -100,35 +100,46 @@
             </el-date-picker>
             <!-- 上传文件 -->
             <!-- + '/upload/upload_file' -->
+            <!-- :on-remove="
+                    () => {
+                        formData[formItem.key] = ''
+                    }
+                " -->
             <!-- :headers="{ Authorization: $store.state.user.token }" -->
             <el-upload
                 v-else-if="formItem.type == 'upload'"
                 class="upload-demo"
+                list-type="picture-card"
                 :ref="formItem.key"
                 :action="baseUrl"
-                :file-list="formItem.fileList"
-                :on-remove="
-                    () => {
-                        formData[formItem.key] = ''
+                :file-list="formData[formItem.key]"
+                :on-error="formItem.onError"
+                :limit="formItem.limit || 10"
+                :on-success="
+                    (file, fileList) => {
+                        uploadSuccess(file, fileList, formItem.key)
                     }
                 "
-                :on-success="formItem.onSuccess"
-                :on-error="formItem.onError"
-                :limit="1"
+                :on-remove="
+                    (file, fileList) => {
+                        uploadRemove(file, fileList, formItem.key)
+                    }
+                "
                 :on-exceed="
                     () => {
-                        $message({ type: 'error', message: '最多上传一个文件' })
+                        $message({ type: 'error', message: `最多上传1个文件` })
                     }
                 "
             >
-                <img
+                <!-- <img
                     v-if="formData[formItem.key]"
                     :src="formData[formItem.key]"
                     style="object-fit: contain; display: block; height: 200px"
                     :style="{ width: formItem.width ? formItem.width : '300px' }"
                     alt="图片"
-                />
-                <el-button size="small" type="primary">点击上传</el-button>
+                /> -->
+                <i class="el-icon-plus"></i>
+                <!-- <el-button size="small" type="primary">点击上传</el-button> -->
             </el-upload>
             <!-- 树 -->
             <el-tree
@@ -198,6 +209,12 @@ export default {
         },
     },
     methods: {
+        uploadSuccess(file, fileList, key) {
+            this.formData[key].push({ url: file.msg, name: fileList.name })
+        },
+        uploadRemove(file, fileList, key) {
+            this.formData[key] = fileList
+        },
         check(formItem) {
             // formItem
             return (item, { checkedNodes, checkedKeys, halfCheckedNodes, halfCheckedKeys }) => {
@@ -218,9 +235,9 @@ export default {
             }
         },
         setFormData() {
-            if (this.option.formData && Object.keys(this.option.formData).length) {
-                this.formData = defaultsDeep({}, this.option.formData, this.formData)
-            }
+            // if (this.option.formData && Object.keys(this.option.formData).length) {
+            //     this.formData = defaultsDeep({}, this.option.formData, this.formData)
+            // }
         },
         onSubmit() {
             this.$refs['dForm'].validate((valid) => {
@@ -231,16 +248,38 @@ export default {
         },
         clearForm() {
             for (let i in this.formData) {
-                this.formData[i] = (this.option.formData && this.option.formData[i]) || null
+                if (this.formData[i] instanceof Array) {
+                    this.formData[i] =
+                        (this.option.formData &&
+                            this.option.formData[i] && [{ url: this.option.formData[i] }]) ||
+                        []
+                } else {
+                    this.formData[i] = this.option.formData && this.option.formData[i]
+                }
             }
-            // this.$refs.dForm.resetFields()
         },
         pushRules() {
             let forms = (this.forms = this.formOption.forms)
+            if (this.option.formData && Object.keys(this.option.formData).length) {
+                this.formData = defaultsDeep({}, this.option.formData, this.formData)
+            }
             forms.forEach((form, index) => {
                 //默认设置
-                this.formData[form.key] = form.defaultValue || null
-
+                if (form.type === 'upload') {
+                    this.formData[form.key] =
+                        (this.formData[form.key] &&
+                            this.formData[form.key].split &&
+                            this.formData[form.key].split(';').map((item) => {
+                                return { url: item }
+                            })) ||
+                        []
+                } else {
+                    if (!this.formData.id) {
+                        this.formData[form.key] = form.defaultValue || null
+                    } else {
+                        this.formData[form.key] = this.formData[form.key]
+                    }
+                }
                 let rules = []
                 form.rules &&
                     form.rules.forEach((rule, ruleIndex) => {
@@ -302,4 +341,8 @@ export default {
 }
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+/deep/.el-upload-list--picture-card .el-upload-list__item-thumbnail {
+    object-fit: cover;
+}
+</style>

@@ -37,13 +37,14 @@ export default {
                 visible: false,
                 title: '',
                 halfTitle: '商家',
-                width: '550px',
+                width: '850px',
                 id: '',
                 beforeDataUrl: '/merchant/info',
             },
             formOption: {
                 labelWidth: '150px',
                 formData: {},
+                inputWidth: '500px',
                 forms: [
                     {
                         key: 'merchantName',
@@ -77,24 +78,24 @@ export default {
                         key: 'homeCarouselJson',
                         label: '商家首页轮播图',
                         type: 'upload',
-                        onSuccess: (fileData) => {
-                            this.upload(fileData, 'homeCarouselJson')
+                        onSuccess: (fileData, fileList) => {
+                            this.upload(fileList, 'homeCarouselJson')
                         },
                     },
                     {
                         key: 'shopCarouselJson',
                         label: '商家商城轮播图',
                         type: 'upload',
-                        onSuccess: (fileData) => {
-                            this.upload(fileData, 'shopCarouselJson')
+                        onSuccess: (fileData, fileList) => {
+                            this.upload(fileList, 'shopCarouselJson')
                         },
                     },
                     {
                         key: 'startCarouselJson',
                         label: '商家广告图',
                         type: 'upload',
-                        onSuccess: (fileData) => {
-                            this.upload(fileData, 'startCarouselJson')
+                        onSuccess: (fileData, fileList) => {
+                            this.upload(fileList, 'startCarouselJson')
                         },
                     },
                     {
@@ -106,10 +107,9 @@ export default {
                         key: 'headImg',
                         label: '头像',
                         type: 'upload',
-                        onSuccess: (fileData) => {
-                            this.upload(fileData, 'headImg')
+                        onSuccess: (fileData, fileList) => {
+                            this.upload(fileList, 'headImg')
                         },
-                        fileList: [{ name: '112', url: '1111111' }],
                     },
                     {
                         key: 'isConsumables',
@@ -158,24 +158,34 @@ export default {
             }
         },
         upload(file, key) {
-            this.$refs.form.formData[key] = file.msg
+            this.$refs.form.formData[key] = file
         },
         closedDialog() {
             let form = this.$refs.form
             form.clearForm()
-            this.formOption.forms.forEach((val) => {
-                form.$refs[val.key] && form.$refs[val.key]?.clearFiles()
-            })
+            // this.formOption.forms.forEach((val) => {
+            //     form.$refs[val.key] && form.$refs[val.key]?.clearFiles()
+            // })
         },
         beforeDataGeted(formData) {
             this.formOption.formData = formData
         },
         async confirm(formData) {
             let res = ''
-            if (formData.id > 0) {
-                res = await updateMerchant(formData)
+            let result = JSON.parse(JSON.stringify(formData))
+            for (let i in result) {
+                if (result[i] instanceof Array) {
+                    if (result[i][0] && result[i][0].url) {
+                        result[i] = result[i].map((item) => item.url).join(';')
+                    } else {
+                        result[i] = ''
+                    }
+                }
+            }
+            if (result.id > 0) {
+                res = await updateMerchant(result)
             } else {
-                res = await addMerchant(formData)
+                res = await addMerchant(result)
             }
             if (res.suc) {
                 this.$emit('confirm')

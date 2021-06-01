@@ -3,12 +3,34 @@
         <d-page ref="dPage" :option="option">
             <template #tableColumns="data">
                 <span v-if="data.column.key == 'headImg' || data.column.key == 'homeCarouselJson'">
-                    <img
-                        v-if="data.row[data.column.key]"
-                        style="width: 250px; height: 150px; object-fit: cover"
-                        :src="data.row[data.column.key]"
-                        alt="暂无图片"
-                    />
+                    <template v-if="data.row[data.column.key]">
+                        <el-popover
+                            v-for="item in data.row[data.column.key].split(';')"
+                            :key="item"
+                            placement="right"
+                            :width="350"
+                            trigger="hover"
+                            :enterable="false"
+                        >
+                            <template #reference>
+                                <img
+                                    style="height: 150px; object-fit: cover; margin-right: 3px"
+                                    :style="{
+                                        width:
+                                            250 / data.row[data.column.key].split(';').length +
+                                            'px',
+                                    }"
+                                    :src="item"
+                                    alt="暂无图片"
+                                />
+                            </template>
+                            <img
+                                style="max-width: 350px; object-fit: contain; margin-right: 3px"
+                                :src="item"
+                                alt="暂无图片"
+                            />
+                        </el-popover>
+                    </template>
                     <div
                         style="
                             width: 250px;

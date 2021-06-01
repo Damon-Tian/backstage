@@ -4,6 +4,10 @@
             <template #tableColumns="data">
                 <span v-if="data.column.key == 'headImg' || data.column.key == 'homeCarouselJson'">
                 </span>
+                <span v-else-if="data.column.key == 'roleKey'">
+                    <i style="font-size: 22px" :class="getIcon(data.row[data.column.key])"></i>
+                    {{ data.row[data.column.key] }}
+                </span>
                 <span v-else>
                     {{ data.row[data.column.key] }}
                 </span>
@@ -55,6 +59,21 @@ export default {
         },
     },
     methods: {
+        getIcon(key) {
+            let icon
+            switch (key) {
+                case 'ADMIN':
+                    icon = 'el-icon-user'
+                    break
+                case 'MERCHANT':
+                    icon = 'el-icon-s-custom'
+                    break
+                default:
+                    icon = 'el-icon-s-custom'
+                    break
+            }
+            return icon
+        },
         closed() {},
         edit(item) {
             this.$refs.addM.dialogOption.id = item.id
